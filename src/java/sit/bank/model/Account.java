@@ -76,7 +76,7 @@ public class Account {
         } else if (amount > 0) {
             setBalance(this.balance - amount);
             //message = "Withdraw complete";        }
+        }
     }
-    
     
 }
