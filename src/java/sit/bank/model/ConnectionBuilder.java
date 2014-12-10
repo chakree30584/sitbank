@@ -14,7 +14,7 @@ public class ConnectionBuilder {
             Class.forName(driver);
             return DriverManager.getConnection(url + "?useUnicode=true&characterEncoding=UTF-8", user, pass);
         } catch (ClassNotFoundException ex) {
-            System.err.println(ex);
+            System.err.println(ex+"test");
         } catch (SQLException ex) {
             System.err.println(ex);
         }

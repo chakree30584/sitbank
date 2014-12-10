@@ -144,7 +144,7 @@ public class User {
         this.accountId = accountId;
     }
     
-    public boolean register(int userId, String userName,
+    public boolean register(String userName,
         String address, String road, String subDistrict,
         String district, String zipCode, String province,
         String country, String identification, String mobile, 
@@ -152,25 +152,23 @@ public class User {
         int regis = 0;
         try {
             Connection con = ConnectionBuilder.getConnection();
-            String sql = "INSERT INTO User_Info VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO sitbank.User_Info VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, userId);
-            ps.setString(2, userName);
-            ps.setString(3, address);
-            ps.setString(4, road);
-            ps.setString(5, subDistrict);
-            ps.setString(6, district);
-            ps.setString(7, zipCode);
-            ps.setString(8, province);
-            ps.setString(9, country);
-            ps.setString(10, identification);
-            ps.setString(11, mobile);
-            ps.setString(12, phone);
-            ps.setString(13, email);
-            ps.setString(14, accountId);
+            ps.setString(1, userName);
+            ps.setString(2, address);
+            ps.setString(3, road);
+            ps.setString(4, subDistrict);
+            ps.setString(5, district);
+            ps.setString(6, zipCode);
+            ps.setString(7, province);
+            ps.setString(8, country);
+            ps.setString(9, identification);
+            ps.setString(10, mobile);
+            ps.setString(11, phone);
+            ps.setString(12, email);
+            ps.setString(13, accountId);
             
             regis = ps.executeUpdate();
-            
             
         } 
         catch (SQLException ex) {
@@ -179,5 +177,6 @@ public class User {
         return regis>0;
         
     }
+   
     
 }
