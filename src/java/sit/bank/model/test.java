@@ -6,14 +6,16 @@
 
 package sit.bank.model;
 
+
 /**
  *
  * @author Man
  */
 public class test {
     public static void main(String[] args) {
-        User a = new User();
-        boolean x = a.register("daechatorn", 
+       
+        /*
+        boolean x = new User().register("daechatorn", "namjai",
                 "139/40", "วุฒากาศ", 
                 "บางค้อ", "จอมทอง", 
                 "10150", "กรุงเทพมหานคร", 
@@ -21,5 +23,12 @@ public class test {
                 "0811163994", "028756701", 
                 "daechatorn.man@gmail.com", "000000000000001");
         System.out.println(x);
+        */
+        
+        //System.out.println(new User().checkIdenUser("771"));
+        
+        //System.out.println("Regis: "+new User().regisEBank("Man", "12345", "1101500716771"));
+        
+        System.out.println("Update: "+new User().resetPassword("Man", "1234"));
     }
 }
