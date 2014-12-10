@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,8 +21,8 @@ import java.util.logging.Logger;
  */
 public class User {
     private int userId;
-    private String Fullname;
-    private String Lastname;
+    private String fullName;
+    private String lastName;
     private String address;
     private String road;
     private String subDistrict;
@@ -32,7 +34,10 @@ public class User {
     private String mobile;
     private String phone;
     private String email;
-    private String accountId;
+    
+    private int accountId;
+    private String type;
+    private int money;
 
     
     User(){
@@ -128,23 +133,22 @@ public class User {
         this.identification = identification;
     }
 
-    public String getFullname() {
-        return Fullname;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFullname(String Fullname) {
-        this.Fullname = Fullname;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getLastname() {
-        return Lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String Lastname) {
-        this.Lastname = Lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
     
-
     public String getMobile() {
         return mobile;
     }
@@ -169,23 +173,43 @@ public class User {
         this.email = email;
     }
 
-    public String getAccountId() {
+    public int getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    
+    
+    
     
     public boolean register(String fullName, String lastName,
         String address, String road, String subDistrict,
         String district, String zipCode, String province,
         String country, String identification, String mobile, 
-        String phone, String email, String accountId){
+        String phone, String email){
         int regis = 0;
         try {
             Connection con = ConnectionBuilder.getConnection();
-            String sql = "INSERT INTO sitbank.User_Info VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO sitbank.User_Info VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, fullName);
             ps.setString(2, lastName);
@@ -200,7 +224,6 @@ public class User {
             ps.setString(11, mobile);
             ps.setString(12, phone);
             ps.setString(13, email);
-            ps.setString(14, accountId);
             
             regis = ps.executeUpdate();
             
@@ -213,7 +236,7 @@ public class User {
     }//เปิดบัญชีหลัก
     
     public User showCustomer(String identification){
-        User result = null;
+        User u = null;
         try{
             Connection con = ConnectionBuilder.getConnection();
             String sql = "SELECT * FROM sitbank.User_Info WHERE Identification = ?";
@@ -221,23 +244,21 @@ public class User {
             ps.setString(1, identification);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                result = new User();
-                result.setUserId(rs.getInt("UserId"));
-                result.setFullname(rs.getString("Fullname"));
-                result.setLastname(rs.getString("Lastname"));
-                result.setAddress(rs.getString("Address"));
-                result.setRoad(rs.getString("Road"));
-                result.setSubDistrict(rs.getString("Subdistrict"));
-                result.setDistrict(rs.getString("District"));
-                result.setZipCode(rs.getString("Zipcode"));
-                result.setProvince(rs.getString("Province"));
-                result.setCountry(rs.getString("Country"));
-                result.setIdentification(rs.getString("Identification"));
-                result.setMobile(rs.getString("Mobile"));
-                result.setPhone(rs.getString("Phone"));
-                result.setEmail(rs.getString("Email"));
-                result.setAccountId(rs.getString("AccountId"));
-                
+                u = new User();
+                u.setUserId(rs.getInt("UserId"));
+                u.setFullName(rs.getString("Fullname"));
+                u.setLastName(rs.getString("Lastname"));
+                u.setAddress(rs.getString("Address"));
+                u.setRoad(rs.getString("Road"));
+                u.setSubDistrict(rs.getString("Subdistrict"));
+                u.setDistrict(rs.getString("District"));
+                u.setZipCode(rs.getString("Zipcode"));
+                u.setProvince(rs.getString("Province"));
+                u.setCountry(rs.getString("Country"));
+                u.setIdentification(rs.getString("Identification"));
+                u.setMobile(rs.getString("Mobile"));
+                u.setPhone(rs.getString("Phone"));
+                u.setEmail(rs.getString("Email"));
             }
             
         }
@@ -245,7 +266,7 @@ public class User {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return result;
+        return u;
     }//ค้นหา สมาชิกจาก บัตรประชาชน
     
     public boolean checkIdenUser(String identification){
@@ -259,6 +280,8 @@ public class User {
         
         return check;
     }//เช็ค ว่ามีชื่อในระบบหลักไหม
+    
+    
     
     public boolean regisEBank(String Username, String Password, String identification){
         int result = 0;
@@ -281,7 +304,7 @@ public class User {
         
         
         return result > 0;
-    }
+    }//สมัครสมาชิก E-Bank
     
     public boolean resetPassword(String Username, String newPassword){
         int result = 0;
@@ -299,7 +322,8 @@ public class User {
         }
         
         return result > 0;
-    }
+    }//reset password
    
+    
     
 }
