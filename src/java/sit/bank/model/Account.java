@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package sit.bank.model;
 
 import java.sql.Connection;
@@ -19,6 +18,7 @@ import org.kohsuke.rngom.ast.builder.BuildException;
  * @author Man
  */
 public class Account {
+
     private int accountId;
     private String accountName;
     private String type;
@@ -64,53 +64,53 @@ public class Account {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-    
-    
-        
-    
-    public boolean deposit(int userId, double money){
+
+    public boolean deposit(int userId, double money) {
         Connection con = null;
-            try{
-                con = ConnectionBuilder.getConnection();
-                String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=? AND user_id=?";
-                PreparedStatement stm = con.prepareStatement(sqlUpdate);
-                double balance = this.getBalance();
-                stm.setDouble(1, balance+money);
+        try {
+            con = ConnectionBuilder.getConnection();
+            String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=? AND user_id=?";
+            PreparedStatement stm = con.prepareStatement(sqlUpdate);
+            double balance = this.getBalance();
+            stm.setDouble(1, balance + money);
+            stm.setInt(2, this.accountId);
+            stm.setInt(3, userId);
+            int done = stm.executeUpdate();
+            if (done > 0) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+            
+        }
+        return false;
+    }
+
+    public boolean withdraw(int userId, double money) {
+        Connection con = null;
+        try {
+            con = ConnectionBuilder.getConnection();
+            String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=? AND user_id=?";
+            PreparedStatement stm = con.prepareStatement(sqlUpdate);
+            double balance = this.getBalance();
+            if (balance - money > 0) {
+                double b = balance - money;
+                stm.setDouble(1, b);
                 stm.setInt(2, this.accountId);
                 stm.setInt(3, userId);
                 int done = stm.executeUpdate();
-                if(done>0){
+                if (done > 0) {
                     return true;
                 }
-            } catch (SQLException ex) {
-                System.out.println(ex);
-                return false;
             }
-        return true;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return false;
     }
-    
-    public boolean withdraw(int id){
-        Connection con = null;
-            try{
-                con = ConnectionBuilder.getConnection();
-                String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=? AND user_id=?";
-                PreparedStatement stm = con.prepareStatement(sqlUpdate);
-                stm.setDouble(1, this.balance);
-                stm.setInt(2, this.accountId);
-                stm.setInt(3, userId);
-                int done = stm.executeUpdate();
-                if(done>0){
-                    return true;
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex);
-                return false;
-            }
-        return true;
+
+    public void transfer(double amount, int accountId) {
+
     }
-    
-    public void transfer(double amount, int accountId){
-        
-    }
-    
+
 }
