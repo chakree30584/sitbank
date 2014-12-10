@@ -65,39 +65,37 @@ public class Account {
         this.userId = userId;
     }
 
-    public boolean deposit(int userId, double money) {
+    public boolean deposit(int accountId, double money) {
         Connection con = null;
         try {
             con = ConnectionBuilder.getConnection();
-            String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=? AND user_id=?";
+            String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=?";
             PreparedStatement stm = con.prepareStatement(sqlUpdate);
             double balance = this.getBalance();
             stm.setDouble(1, balance + money);
             stm.setInt(2, this.accountId);
-            stm.setInt(3, userId);
             int done = stm.executeUpdate();
             if (done > 0) {
                 return true;
             }
         } catch (SQLException ex) {
             System.out.println(ex);
-            
+
         }
         return false;
     }
 
-    public boolean withdraw(int userId, double money) {
+    public boolean withdraw(int accountId, double money) {
         Connection con = null;
         try {
             con = ConnectionBuilder.getConnection();
-            String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=? AND user_id=?";
+            String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=?";
             PreparedStatement stm = con.prepareStatement(sqlUpdate);
             double balance = this.getBalance();
             if (balance - money > 0) {
                 double b = balance - money;
                 stm.setDouble(1, b);
                 stm.setInt(2, this.accountId);
-                stm.setInt(3, userId);
                 int done = stm.executeUpdate();
                 if (done > 0) {
                     return true;
@@ -109,8 +107,11 @@ public class Account {
         return false;
     }
 
-    public void transfer(double amount, int accountId) {
-
+    public static void transfer(double money, int accountId1, int accountId2) {
+        Connection con = null;
+        Account a = null;
+        a.withdraw(accountId1, money);
+        a.deposit(accountId2, money);
     }
-
+    
 }
