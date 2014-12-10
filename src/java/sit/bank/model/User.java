@@ -39,6 +39,8 @@ public class User {
     private String country;
     private String province;
     private String zip;
+    
+    private Account myAccount;
 
     public int getUserId() {
         return userId;
@@ -167,7 +169,15 @@ public class User {
     public void setZip(String zip) {
         this.zip = zip;
     }
-    
+
+    public Account getMyAccount() {
+        return myAccount;
+    }
+
+    public void setMyAccount(Account myAccount) {
+        this.myAccount = myAccount;
+    }
+
     
     
     
@@ -218,9 +228,49 @@ public class User {
         }
         
         return result > 0 && result2 > 0;
+    }// เปิดบัญชี
+    
+    public List<User> findByUserId(int userId){
+        List<User> result = new ArrayList<User>();
+        try{
+            Connection con = ConnectionBuilder.getConnection();
+            String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.User_Id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                User u = new User();
+                u.setFullName(rs.getString("Fullname"));
+                u.setLastName(rs.getString("Lastname"));
+                u.setEmail(rs.getString("Email"));
+                u.setHomePhone(rs.getString("HomePhone"));
+                u.setIdentification(rs.getString("Identification"));
+                u.setMobilePhone(rs.getString("MobilePhone"));
+                u.setSex(rs.getString("Sex"));
+                u.setUserId(rs.getInt("User_Id"));
+                
+                u.setAddress(rs.getString("Address_Id"));
+                u.setCountry(rs.getString("Country"));
+                u.setDistrict(rs.getString("District"));
+                u.setHomeId(rs.getInt("Home_Id"));
+                u.setProvince(rs.getString("Province"));
+                u.setRoad(rs.getString("Road"));
+                u.setSubDistrict(rs.getString("Subdistrict"));
+                u.setZip(rs.getString("Zip"));
+                
+                u.setMyAccount(new Account(rs.getInt("Account_Id"), 
+                        rs.getString("Account_Name"), rs.getString("Type"), 
+                        rs.getDouble("Balance"), rs.getInt("User_Id")));
+                
+                result.add(u);
+            }
+        }
+        catch(SQLException ex){
+            System.out.println("sql find By User Id error: "+ex);
+        }
+        
+        return result;
     }
-    
-    
     
     
     

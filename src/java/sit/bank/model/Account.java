@@ -18,6 +18,18 @@ public class Account {
     private String type;
     private Double balance;
     private int userId;
+    
+    Account(){
+    
+    }
+    
+    Account(int accountId, String accountName, String type, Double balance, int userId){
+        this.accountId = accountId;
+        this.accountName = accountName;
+        this.type = type;
+        this.userId = userId;
+        this.balance = balance;
+    }
 
     public int getAccountId() {
         return accountId;
