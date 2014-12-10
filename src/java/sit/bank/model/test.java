@@ -21,7 +21,7 @@ public class test {
                 "10150", "กรุงเทพมหานคร", 
                 "ไทย", "1101500716771", 
                 "0811163994", "028756701", 
-                "daechatorn.man@gmail.com", "000000000000001");
+                "daechatorn.man@gmail.com");
         System.out.println(x);
         */
         
