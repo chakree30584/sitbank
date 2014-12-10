@@ -64,17 +64,18 @@ public class Account {
     public void deposit(double amount){
         if (amount > 0) {
             setBalance(this.balance + amount);
+            //message = "Deposit complete"; 
         } else {
-            System.out.println("Deposit: 0");
+            //message = "Deposit not complete";
         }
     }
     
     public void withdraw(double amount){
         if (this.balance - amount < 0) {
-            System.out.println("Not enough balance (balance=" + balance + "), amount=" + amount + ")");
+            //message = "Not enough balance";
         } else if (amount > 0) {
             setBalance(this.balance - amount);
-        }
+            //message = "Withdraw complete";        }
     }
     
     
