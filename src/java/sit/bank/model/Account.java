@@ -87,11 +87,12 @@ public class Account {
 
     public boolean withdraw(int accountId, double money) {
         Connection con = null;
+        double balance;
         try {
             con = ConnectionBuilder.getConnection();
             String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=?";
             PreparedStatement stm = con.prepareStatement(sqlUpdate);
-            double balance = this.getBalance();
+            balance = this.getBalance();
             if (balance - money > 0) {
                 double b = balance - money;
                 stm.setDouble(1, b);
