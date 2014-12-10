@@ -6,7 +6,13 @@
 
 package sit.bank.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.kohsuke.rngom.ast.builder.BuildException;
 
 /**
  *
@@ -59,24 +65,52 @@ public class Account {
         this.userId = userId;
     }
     
+    
         
     
-    public void deposit(double amount){
-        if (amount > 0) {
-            setBalance(this.balance + amount);
-            //message = "Deposit complete"; 
-        } else {
-            //message = "Deposit not complete";
-        }
+    public boolean deposit(int userId, double money){
+        Connection con = null;
+            try{
+                con = ConnectionBuilder.getConnection();
+                String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=? AND user_id=?";
+                PreparedStatement stm = con.prepareStatement(sqlUpdate);
+                double balance = this.getBalance();
+                stm.setDouble(1, balance+money);
+                stm.setInt(2, this.accountId);
+                stm.setInt(3, userId);
+                int done = stm.executeUpdate();
+                if(done>0){
+                    return true;
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex);
+                return false;
+            }
+        return true;
     }
     
-    public void withdraw(double amount){
-        if (this.balance - amount < 0) {
-            //message = "Not enough balance";
-        } else if (amount > 0) {
-            setBalance(this.balance - amount);
-            //message = "Withdraw complete";        }
-        }
+    public boolean withdraw(int id){
+        Connection con = null;
+            try{
+                con = ConnectionBuilder.getConnection();
+                String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=? AND user_id=?";
+                PreparedStatement stm = con.prepareStatement(sqlUpdate);
+                stm.setDouble(1, this.balance);
+                stm.setInt(2, this.accountId);
+                stm.setInt(3, userId);
+                int done = stm.executeUpdate();
+                if(done>0){
+                    return true;
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex);
+                return false;
+            }
+        return true;
+    }
+    
+    public void transfer(double amount, int accountId){
+        
     }
     
 }
