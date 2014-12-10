@@ -36,6 +36,8 @@ public class test {
                 "Phutthabucha", "Bangkoknoi", "Bangmod", 
                 "Bangkok", "Thailand", "10110"));
         */
-        System.out.println(new User().findByUserId(1).get(0).getMyAccount().getType());
+        //System.out.println(new User().findByUserId(1).get(0).getMyAccount().getType());
+        //System.out.println("Account: "+new Account().findMyAccount("T"));
+        //System.out.println("Register E: "+new UserEBank().addUserE("ManE", "121212", 100));
     }
 }
