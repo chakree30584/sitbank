@@ -29,6 +29,6 @@ public class test {
         
         //System.out.println("Regis: "+new User().regisEBank("Man", "12345", "1101500716771"));
         
-        System.out.println("Update: "+new User().resetPassword("Man", "1234"));
+        //System.out.println("Update: "+new User().resetPassword("Man", "1234"));
     }
 }
