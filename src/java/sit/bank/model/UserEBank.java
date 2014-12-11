@@ -46,11 +46,30 @@ public class UserEBank {
         this.userId = userId;
     }
     
+    public boolean setUserEBank(String username, String password, int userId){
+        Connection con = null;
+        try{
+            con = ConnectionBuilder.getConnection();
+            String sqlCmd = "INSERT INTO userEBank(username, password, userId) VALUES(?,?,?)";
+            PreparedStatement stm = con.prepareStatement(sqlCmd);
+            stm.setString(1, username);
+            stm.setString(2, password);
+            stm.setInt(3, userId);
+            int done = stm.executeUpdate();
+            if(done>0){
+                return true;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return false;
+    }
     
     //kuy
     public boolean resetPassword(int userId, String oldPass, String newPass){
         Connection con = null;
         this.password = null;
+        int done = 0;
         try{
             con = ConnectionBuilder.getConnection();
             String sqlCmd = "UPDATE userEBank SET password=? WHERE user_id=?";
@@ -58,15 +77,13 @@ public class UserEBank {
             if(oldPass.equals(password)){
                 stm.setString(1, newPass);
                 stm.setInt(2, userId);
-                int done = stm.executeUpdate();
-                if(done>0){
-                    return true;
-                }
+                done = stm.executeUpdate();
+                
             }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        return false;
+        return done >0;
     }
     
     
