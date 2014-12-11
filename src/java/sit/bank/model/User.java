@@ -256,47 +256,70 @@ public class User {
 
         return result > 0 && result2 > 0 && lastresult > 0;
     }// เปิดบัญชี
-
-    public static List<User> findByUserId(long userId) {
+    
+    public static boolean checkLong(String userId){
+        int check = 0;
+        try{
+            Long.parseLong(userId);
+            check = 1;
+        }
+        catch(Exception ex){
+            System.out.println("isn't Long "+ex);
+        }
+        return check>0;
+    } 
+    
+    public static List<User> findByUser(String userId) {
         List<User> result = new ArrayList<User>();
         try {
             Connection con = ConnectionBuilder.getConnection();
-            String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.User_Id = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setLong(1, userId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                User u = new User();
-                u.setFullName(rs.getString("Fullname"));
-                u.setLastName(rs.getString("Lastname"));
-                u.setEmail(rs.getString("Email"));
-                u.setHomePhone(rs.getString("HomePhone"));
-                u.setIdentification(rs.getString("Identification"));
-                u.setMobilePhone(rs.getString("MobilePhone"));
-                u.setSex(rs.getString("Sex"));
-                u.setUserId(rs.getLong("User_Id"));
-
-                u.setAddress(rs.getString("Address_Id"));
-                u.setCountry(rs.getString("Country"));
-                u.setDistrict(rs.getString("District"));
-                u.setHomeId(rs.getLong("Home_Id"));
-                u.setProvince(rs.getString("Province"));
-                u.setRoad(rs.getString("Road"));
-                u.setSubDistrict(rs.getString("Subdistrict"));
-                u.setZip(rs.getString("Zip"));
-
-                u.setMyAccount(new Account(rs.getLong("Account_Id"),
-                        rs.getString("Account_Name"), rs.getString("Type"),
-                        rs.getDouble("Balance"), rs.getLong("User_Id")));
-
-                result.add(u);
+            ResultSet rs = null;
+            if(checkLong(userId)){
+                String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.User_Id = ?";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setLong(1, Long.parseLong(userId));
+                rs = ps.executeQuery();
             }
+            else{
+                String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE UPPER(U.Fullname) like ?";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1, userId.toUpperCase()+"%");
+                rs = ps.executeQuery();
+            }
+                while (rs.next()) {
+                    User u = new User();
+                    u.setFullName(rs.getString("Fullname"));
+                    u.setLastName(rs.getString("Lastname"));
+                    u.setEmail(rs.getString("Email"));
+                    u.setHomePhone(rs.getString("HomePhone"));
+                    u.setIdentification(rs.getString("Identification"));
+                    u.setMobilePhone(rs.getString("MobilePhone"));
+                    u.setSex(rs.getString("Sex"));
+                    u.setUserId(rs.getLong("User_Id"));
+
+                    u.setAddress(rs.getString("Address_Id"));
+                    u.setCountry(rs.getString("Country"));
+                    u.setDistrict(rs.getString("District"));
+                    u.setHomeId(rs.getLong("Home_Id"));
+                    u.setProvince(rs.getString("Province"));
+                    u.setRoad(rs.getString("Road"));
+                    u.setSubDistrict(rs.getString("Subdistrict"));
+                    u.setZip(rs.getString("Zip"));
+
+                    u.setMyAccount(new Account(rs.getLong("Account_Id"),
+                            rs.getString("Account_Name"), rs.getString("Type"),
+                            rs.getDouble("Balance"), rs.getLong("User_Id")));
+
+                    result.add(u);
+                }
         } catch (SQLException ex) {
             System.out.println("sql find By User Id error: " + ex);
         }
 
         return result;
     }
+    
+    
 
     public boolean update() {
         int result = 0;
