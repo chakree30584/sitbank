@@ -194,6 +194,7 @@ public class User {
             String address, String road,
             String subDistrict, String district, String country,
             String province, String zip, String accountName, String type, double money) {
+        
         int result = 0;
         int result2 = 0;
         int lastresult = 0;
@@ -256,7 +257,7 @@ public class User {
         return result > 0 && result2 > 0 && lastresult > 0;
     }// เปิดบัญชี
 
-    public List<User> findByUserId(long userId) {
+    public static List<User> findByUserId(long userId) {
         List<User> result = new ArrayList<User>();
         try {
             Connection con = ConnectionBuilder.getConnection();
@@ -297,12 +298,7 @@ public class User {
         return result;
     }
 
-    public boolean update(String fullName,
-            String lastName, String sex, String identification,
-            String email, String mobilePhone, String homePhone,
-            String address, String road,
-            String subDistrict, String district, String country,
-            String province, String zip, long userId) {
+    public boolean update() {
         int result = 0;
         try {
             Connection con = ConnectionBuilder.getConnection();

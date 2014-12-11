@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sit.bank.model.User;
 
 /**
  *
@@ -33,7 +34,7 @@ public class SearchAjaxServlet extends HttpServlet {
         String searchValue = request.getParameter("searchValue");
         String type = request.getParameter("type");
         if(type.equals("searchbyname")){
-            
+            //User u = User.
         }else if(type.equals("searchbyid")){
             
         }else if(type.equals("getallaccbyuid")){

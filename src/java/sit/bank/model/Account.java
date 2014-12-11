@@ -135,7 +135,7 @@ public class Account {
         addTransaction(t);
     }
 
-    public boolean checkLong(String account) {
+    public static boolean checkLong(String account) {
         try {
             Long.parseLong(account);
             return true;
@@ -145,7 +145,7 @@ public class Account {
         return false;
     }
 
-    public Account findMyAccount(String account) {
+    public static Account findMyAccount(String account) {
         Account ac = null;
         try {
             Connection con = ConnectionBuilder.getConnection();
