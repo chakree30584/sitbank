@@ -32,14 +32,14 @@ url="jdbc:mysql://server.chakree.me:3306/sitbank" user="sitbank" password="kmutt
                 <table>
                     <div class="form-group">
                         <tr>
-                            <th style="text-align: right"><label for="exampleInputFullname" >Fullname:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputFullname" name="fullname" placeholder="Enter Fullname"></td>
+                            <th style="text-align: right"><label for="exampleInputFullname"  >Fullname:&nbsp;</label></th>
+                            <td align="left"><input type="text" value="${user.fullname}" class="form-control" id="exampleInputFullname" name="fullname" placeholder="Enter Fullname"></td>
                         </tr>
                     </div>
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputLastname">Lastname:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputLastname" name="lastname" placeholder="Enter Lastname"></td>
+                            <td align="left"><input type="text" value="${user.fullname}" class="form-control" id="exampleInputLastname" name="lastname" placeholder="Enter Lastname"></td>
                         </tr>
                     </div>
                     <div class="form-group">
@@ -63,27 +63,27 @@ url="jdbc:mysql://server.chakree.me:3306/sitbank" user="sitbank" password="kmutt
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputIden">Identification:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputIden" name="identification" placeholder="Enter Identification"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputIden" value="${user.identification}" name="identification" placeholder="Enter Identification"></td>
                         </tr>
                     </div>
                     
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputEmail">Email:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputEmail" name="email" placeholder="Enter Email"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputEmail" value="${user.email}" name="email" placeholder="Enter Email"></td>
                         </tr>
                     </div>
                     
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputHome">Home Phone:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputHome" name="homePhone" placeholder="Enter Home Phone"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputHome" value="${user.homephone}" name="homePhone" placeholder="Enter Home Phone"></td>
                         </tr>
                     </div>
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputMobile">Mobile Phone:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputMobile" name="mobilePhone" placeholder="Enter Mobile Phone"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputMobile" value="${user.mobilephone}" name="mobilePhone" placeholder="Enter Mobile Phone"></td>
                         </tr>
                     </div>
                 </table>
@@ -93,45 +93,45 @@ url="jdbc:mysql://server.chakree.me:3306/sitbank" user="sitbank" password="kmutt
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputAddress" >Address:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputAddress" name="address" placeholder="Enter Address"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputAddress" value="${user.address}"name="address" placeholder="Enter Address"></td>
                         </tr>
                     </div>
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputRoad">Road:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputRoad" name="road" placeholder="Enter Road"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputRoad" name="road" value="${user.road}" placeholder="Enter Road"></td>
                         </tr>
                     </div>
                     
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputSubDis">SubDistrict:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputSubDis" name="subDistrict" placeholder="Enter Sub District"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputSubDis" name="subDistrict" value="${user.subDistrict}" placeholder="Enter Sub District"></td>
                         </tr>
                     </div>
                     
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputDis">District:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputDis" name="district" placeholder="Enter District"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputDis" name="district" value="${user.district}" placeholder="Enter District"></td>
                         </tr>
                     </div>
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputCountry">Country:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputCountry" name="country" placeholder="Enter Country"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputCountry" name="country" value="${user.country}"placeholder="Enter Country"></td>
                         </tr>
                     </div>
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputProvince">Province:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputProvince" name="province" placeholder="Enter Province"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputProvince" name="province" value="${user.province}" placeholder="Enter Province"></td>
                         </tr>
                     </div>
                     <div class="form-group">
                         <tr>
                             <th style="text-align: right"><label for="exampleInputZip">Zip:&nbsp;</label></th>
-                            <td align="left"><input type="text" class="form-control" id="exampleInputZip" name="zip" placeholder="Enter Zip"></td>
+                            <td align="left"><input type="text" class="form-control" id="exampleInputZip" name="zip" value="${user.zip}"  placeholder="Enter Zip"></td>
                         </tr>
                     </div>
                     
