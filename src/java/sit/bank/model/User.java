@@ -183,10 +183,10 @@ public class User {
         String email, String mobilePhone, String homePhone,
         String address, String road,
         String subDistrict, String district, String country,
-        String province, String zip) {
+        String province, String zip, String accountName, String type, double money) {
         int result = 0;
         int result2 = 0;
-
+        int lastresult = 0;
         try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "INSERT INTO UserInfo Values (null, ?, ?, ?, ?, ?, ?, ?)";
@@ -204,6 +204,8 @@ public class User {
                 PreparedStatement psGet = con.prepareStatement(sqlGet);
                 ResultSet rs = psGet.executeQuery();
                 if (rs.next()) {
+                    //add address table
+                    long iduser = rs.getLong("User_Id");
                     String sql2 = "INSERT INTO Address Values (null, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement ps2 = con.prepareStatement(sql2);
                     ps2.setString(1, address);
@@ -213,9 +215,20 @@ public class User {
                     ps2.setString(5, country);
                     ps2.setString(6, province);
                     ps2.setString(7, zip);
-                    ps2.setLong(8, rs.getLong("User_Id"));
-
+                    ps2.setLong(8, iduser);
                     result2 = ps2.executeUpdate();
+                    
+                    if(result2 > 0){
+                     //add account table
+                            String sql3 = "INSERT INTO Account Values (null, ?, ?, ?, ?)";
+                            PreparedStatement ps3 = con.prepareStatement(sql3);
+                            ps3.setString(1, accountName);
+                            ps3.setString(2, type);
+                            ps3.setDouble(3, money);
+                            ps3.setLong(4, iduser);
+                            lastresult = ps3.executeUpdate();
+                        
+                    }
                 }
             }
 
@@ -223,7 +236,7 @@ public class User {
             System.out.println("sql add error: " + ex);
         }
 
-        return result > 0 && result2 > 0;
+        return result > 0 && result2 > 0 && lastresult > 0;
     }// เปิดบัญชี
 
     public List<User> findByUserId(long userId) {

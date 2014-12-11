@@ -14,28 +14,21 @@ package sit.bank.model;
 public class test {
     public static void main(String[] args) {
        
-        /*
-        boolean x = new User().register("daechatorn", "namjai",
-                "139/40", "วุฒากาศ", 
-                "บางค้อ", "จอมทอง", 
-                "10150", "กรุงเทพมหานคร", 
-                "ไทย", "1101500716771", 
-                "0811163994", "028756701", 
-                "daechatorn.man@gmail.com");
-        System.out.println(x);
-        */
+        
+       
+        
         
         //System.out.println(new User().checkIdenUser("771"));
         
         //System.out.println("Regis: "+new User().regisEBank("Man", "12345", "1101500716771"));
         
         //System.out.println("Update: "+new User().resetPassword("Man", "1234"));
-        /*System.out.println(new User().addUser("Aon", "Duan", 
+        System.out.println(new User().addUser("Aon2", "Duan2", 
                 "Male", "1102399471003", "aonit18@gmail.com", 
                 "0811111111", "022221432", "123/45",
                 "Phutthabucha", "Bangkoknoi", "Bangmod", 
-                "Bangkok", "Thailand", "10110"));
-        */
+                "Bangkok", "Thailand", "10110","Test Account","ออมทรัพย์",100.25));
+        
         //System.out.println(new User().findByUserId(1).get(0).getMyAccount().getType());
         //System.out.println("Account: "+new Account().findMyAccount("T"));
         //System.out.println("Register E: "+new UserEBank().addUserE("ManE", "121212", 100));
