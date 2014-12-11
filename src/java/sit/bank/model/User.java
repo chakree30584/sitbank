@@ -245,7 +245,6 @@ public class User {
                         trans.setAmount(0);
                         trans.setTransactionCode(Transaction.TransactionCode.ADU);
                         addTransaction(0, trans);
-
                     }
                 }
             }
