@@ -5,6 +5,7 @@ var userObj;
 var keepamount;
 $(document).ready(function (e) {
     //$("#confirmmodal").modal("show");
+    $("#navdeposit").addClass("active");
 });
 
 $("#moneyinput").on("blur", function (e) {
@@ -34,7 +35,7 @@ $("#accsearchbox").on("keyup", function (e) {
             } else {
                 search(input, "id");
             }
-        }, 1000);
+        }, 600);
     }
 });
 function search(input, type) {
@@ -92,7 +93,7 @@ $("#accsearchoutput").on("click", ".accountselector", function (e) {
                     result += '<span class="glyphicon glyphicon-usd"></span></span></h1></td><td>';
                     result += '<span style="font-size:2em;">' + acc.accountName + '</span><br>';
                     result += 'บัญชี' + acc.type + '<br>';
-                    result += 'ยอดเงิน : ' + acc.balance;
+                    result += 'ยอดเงิน : ' + accounting.formatMoney(acc.balance,'');
                     result += '</td></tr></table></div></div>';
                     $("#accselectoutput").append(result);
                 });
@@ -123,7 +124,7 @@ $("#accselectoutput").on("click", ".accbkselector", function (e) {
                     $(".accsearchbtn").hide();
                     $("#accshowname").html(acc.accountName);
                     $("#accshowtype").html(acc.type);
-                    $("#accshowbalance").html(acc.balance);
+                    $("#accshowbalance").html(accounting.formatMoney(acc.balance,''));
                     $(".accshowarea").fadeIn(300);
                 });
             } else {
@@ -209,7 +210,7 @@ function animateMoney(balance, amount) {
     var bal = accounting.unformat(balance);
     var amt = accounting.unformat(amount);
     jQuery({someValue: amt}).animate({someValue: 0}, {
-        duration: 2000,
+        duration: 1000,
         step: function () { 
             $("#addamt").html("+"+accounting.formatMoney(this.someValue, ''));
         },
@@ -218,7 +219,7 @@ function animateMoney(balance, amount) {
         }
     });
     jQuery({someValue: bal}).animate({someValue: bal + amt}, {
-        duration: 2000,
+        duration: 1000,
         step: function () { 
             $("#accconfirmbalance").html(accounting.formatMoney(this.someValue, ''));
         },

@@ -108,13 +108,16 @@ public class Account {
         return done > 0;
     }
 
-    public void transfer(double money, long accountId1, long accountId2) {
+    public static boolean transfer(double money, long accountId1, long accountId2) {
         Connection con = null;
-        Account a = null;
-        //a.withdraw(accountId1, money);
-        //a.deposit(accountId2, money);
-        Transaction t = new Transaction();
-        Transaction.writeTransaction(userId, "CST", money);
+        Account s = Account.findByAccountId(accountId1);
+        Account d = Account.findByAccountId(accountId2);
+        if( s.withdraw(money) & d.deposit(money)){
+            Transaction t = new Transaction();
+            Transaction.writeTransaction(accountId1+1111111+accountId2, "CST", money);
+            return true;
+        }
+        return false;
     }
 
     public static boolean openNewAccount(String accountName, String type, Double money, long iduser) throws SQLException {

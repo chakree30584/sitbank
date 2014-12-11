@@ -10,12 +10,6 @@
         <link href="assets/css/bootstrap.min.css" rel="stylesheet">
         <link href="assets/css/bootstrap-sitbank.css" rel="stylesheet">
         <link href="assets/css/admin.css" rel="stylesheet">
-        <style>
-            body {
-                padding-top: 65px;
-                padding-bottom: 20px;
-            }
-        </style>
     </head>
 
     <body>

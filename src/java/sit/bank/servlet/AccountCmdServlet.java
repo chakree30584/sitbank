@@ -49,6 +49,13 @@ public class AccountCmdServlet extends HttpServlet {
             if(ac.withdraw(Double.parseDouble(amt))){
                 json.put("result", 1);
             }
+        }else if(cmd.equals("transfer")){
+            String saccId = request.getParameter("sourceaccId");
+            String daccId = request.getParameter("destaccId");
+            String amt = request.getParameter("amt");
+            if(Account.transfer(Double.parseDouble(amt), Long.parseLong(saccId), Long.parseLong(daccId))){
+                json.put("result", 1);
+            }
         }
         try (PrintWriter out = response.getWriter()) {
             out.print(json);
