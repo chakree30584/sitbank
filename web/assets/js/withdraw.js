@@ -162,7 +162,16 @@ $("#contbtn").on("click", function (e) {
                 $("#moneyinput").removeClass("flash");
             }, 1000);
         });
-    } else {
+    }else if(accounting.unformat(amount) > parseFloat(accObj.balance)){
+        bootbox.alert("จำนวนเงินที่จะถอนมีมากกว่าจำนวนเงินในบัญชี !", function () {
+            $("#moneyinput").addClass("animated");
+            $("#moneyinput").addClass("flash");
+            setTimeout(function () {
+                $("#moneyinput").removeClass("animated");
+                $("#moneyinput").removeClass("flash");
+            }, 1000);
+        });
+    }else {
         $.ajax({
             type: "POST",
             url: "ThaiBahtAjaxServlet",
@@ -175,7 +184,7 @@ $("#contbtn").on("click", function (e) {
         $("#accconfirmname").html(accObj.accountName);
         $("#accconfirmtype").html(accObj.type);
         $("#accconfirmbalance").html(accObj.balance);
-        $("#addamt").html("+" + accounting.formatMoney(amount, ''));
+        $("#addamt").html("-" + accounting.formatMoney(amount, ''));
         $("#confirmmodal").modal("show");
         keepamount = amount;
     }
@@ -186,11 +195,11 @@ $("#confirmbtn").on("click",function(e){
     $.ajax({
         type: "POST",
         url: "AccountCmdServlet",
-        data: {'cmd': "deposit", 'amt': accounting.unformat(keepamount), 'accId':accObj.accountId},
+        data: {'cmd': "withdraw", 'amt': accounting.unformat(keepamount), 'accId':accObj.accountId},
         dataType: "json",
         success: function (data) {
             if (data.result != 1) {
-                alert("Deposit Error !");
+                alert("Withdraw Error !");
             }
         }
     });
@@ -211,19 +220,19 @@ function animateMoney(balance, amount) {
     jQuery({someValue: amt}).animate({someValue: 0}, {
         duration: 2000,
         step: function () { 
-            $("#addamt").html("+"+accounting.formatMoney(this.someValue, ''));
+            $("#addamt").html("-"+accounting.formatMoney(this.someValue, ''));
         },
         always: function () {
             $("#addamt").html("&nbsp;&nbsp;<span class='glyphicon glyphicon-ok'></span> <span style='font-size:0.5em;'>ดำเนินการเรียบร้อย</span>")
         }
     });
-    jQuery({someValue: bal}).animate({someValue: bal + amt}, {
+    jQuery({someValue: bal}).animate({someValue: bal - amt}, {
         duration: 2000,
         step: function () { 
             $("#accconfirmbalance").html(accounting.formatMoney(this.someValue, ''));
         },
         always: function () {
-            $("#accconfirmbalance").html(accounting.formatMoney(bal + amt, ''));
+            $("#accconfirmbalance").html(accounting.formatMoney(bal - amt, ''));
             $("#confirmloader").hide();
             $("#finishbtn").show();
         }

@@ -23,7 +23,7 @@
         <t:adminnavbar/>
 
         <div class="container">
-            <h2>ฝากเงิน</h2><br>
+            <h2>ถอนเงิน</h2><br>
             <div class="row">
                 <div class="col-md-6">
                     <div class="panel panel-primary panel-acc">
@@ -143,7 +143,7 @@
                                 </td><td>
                                     <div id="addamt" style="font-size:4em; padding-left:10px;"></div>
                                 </td></tr></table><br>
-                        ยอดเงินที่ฝาก (ตัวหนังสือ) : <span id="accconfirmthaibaht"></span>
+                        ยอดเงินที่ถอน (ตัวหนังสือ) : <span id="accconfirmthaibaht"></span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal" id="cancelconbtn">แก้ไข</button>
@@ -163,7 +163,7 @@
         <script src="assets/js/bootbox.min.js"></script>
         <script src="assets/js/accounting.js"></script>
         <script src="assets/js/jquery.animateNumber.min.js"></script>
-        <script src="assets/js/deposit.js"></script>
+        <script src="assets/js/withdraw.js"></script>
         
     </body>
 </html>

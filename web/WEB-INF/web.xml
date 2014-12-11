@@ -8,6 +8,14 @@
         <servlet-name>SearchAjaxServlet</servlet-name>
         <servlet-class>sit.bank.servlet.SearchAjaxServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ThaiBahtAjaxServlet</servlet-name>
+        <servlet-class>sit.bank.servlet.ThaiBahtAjaxServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AccountCmdServlet</servlet-name>
+        <servlet-class>sit.bank.servlet.AccountCmdServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Main</servlet-name>
         <url-pattern>/Main</url-pattern>
@@ -15,6 +23,14 @@
     <servlet-mapping>
         <servlet-name>SearchAjaxServlet</servlet-name>
         <url-pattern>/SearchAjaxServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ThaiBahtAjaxServlet</servlet-name>
+        <url-pattern>/ThaiBahtAjaxServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountCmdServlet</servlet-name>
+        <url-pattern>/AccountCmdServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

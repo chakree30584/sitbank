@@ -82,7 +82,7 @@ public class Transaction implements Serializable {
         try {
             Connection con = ConnectionBuilder.getConnection();
             Transaction t = null;
-            String sqlCmd = "SELECT * FROM transactions WHERE account_id = ?";
+            String sqlCmd = "SELECT * FROM Transactions WHERE account_id = ?";
             PreparedStatement stm = con.prepareStatement(sqlCmd);
             stm.setLong(1, accountId);
             ResultSet rs = stm.executeQuery();
@@ -99,11 +99,12 @@ public class Transaction implements Serializable {
     }
 
     public static boolean writeTransaction(long acid, String code, Double amount) {
+        System.out.println("writeTranscationCalled");
         int x = 0;
         try {
             Connection conn = ConnectionBuilder.getConnection();
             Transaction t = null;
-            String sqlCmd = "INSERT INTO transactions (account_id, transaction_code, transaction_date, amount) VALUES (?, ?, now(), ?)";
+            String sqlCmd = "INSERT INTO Transactions (account_id, transaction_code, transaction_date, amount) VALUES (?, ?, now(), ?)";
             PreparedStatement pstm = conn.prepareStatement(sqlCmd);
             pstm.setLong(1, acid);
             pstm.setString(2, code);

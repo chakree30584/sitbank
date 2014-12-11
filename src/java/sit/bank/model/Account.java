@@ -68,16 +68,16 @@ public class Account {
         this.userId = userId;
     }
 
-    public boolean deposit(long accountId, double money) {
+    public boolean deposit(double money) {
         Connection con = null;
         int done = 0;
         try {
             con = ConnectionBuilder.getConnection();
-            String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=?";
+            String sqlUpdate = "UPDATE Account SET balance=? WHERE account_id=?";
             PreparedStatement stm = con.prepareStatement(sqlUpdate);
             double balance = this.getBalance();
             stm.setDouble(1, balance + money);
-            stm.setLong(2, this.accountId);
+            stm.setLong(2, accountId);
             done = stm.executeUpdate();
             Transaction.writeTransaction(userId, "CSD", money);
         } catch (SQLException ex) {
@@ -86,19 +86,19 @@ public class Account {
         return done > 0;
     }
 
-    public boolean withdraw(long accountId, double money) {
+    public boolean withdraw(double money) {
         Connection con = null;
         double balance;
         int done = 0;
         try {
             con = ConnectionBuilder.getConnection();
-            String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=?";
+            String sqlUpdate = "UPDATE Account SET balance=? WHERE account_id=?";
             PreparedStatement stm = con.prepareStatement(sqlUpdate);
             balance = this.getBalance();
-            if (balance - money > 0) {
+            if (balance - money >= 0) {
                 double b = balance - money;
                 stm.setDouble(1, b);
-                stm.setLong(2, this.accountId);
+                stm.setLong(2, accountId);
                 done = stm.executeUpdate();
                 Transaction.writeTransaction(userId, "CSW", money);
             }
@@ -111,8 +111,8 @@ public class Account {
     public void transfer(double money, long accountId1, long accountId2) {
         Connection con = null;
         Account a = null;
-        a.withdraw(accountId1, money);
-        a.deposit(accountId2, money);
+        //a.withdraw(accountId1, money);
+        //a.deposit(accountId2, money);
         Transaction t = new Transaction();
         Transaction.writeTransaction(userId, "CST", money);
     }
