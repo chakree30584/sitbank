@@ -73,6 +73,7 @@ public class UserEBank {
     
     public boolean setUserEBank(String username, String password, int userId){
         Connection con = null;
+        int done = 0;
         try{
             con = ConnectionBuilder.getConnection();
             String sqlCmd = "INSERT INTO userEBank(username, password, userId) VALUES(?,?,?)";
@@ -80,14 +81,12 @@ public class UserEBank {
             stm.setString(1, username);
             stm.setString(2, password);
             stm.setInt(3, userId);
-            int done = stm.executeUpdate();
-            if(done>0){
-                return true;
-            }
+            done = stm.executeUpdate();
+           
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        return false;
+        return done>0;
     }
     
     public boolean resetPassword(int userId, String oldPass, String newPass){

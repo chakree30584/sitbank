@@ -80,6 +80,7 @@ public class Account {
 
     public boolean deposit(int accountId, double money) {
         Connection con = null;
+        int done = 0;
         try {
             con = ConnectionBuilder.getConnection();
             String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=?";
@@ -87,20 +88,19 @@ public class Account {
             double balance = this.getBalance();
             stm.setDouble(1, balance + money);
             stm.setInt(2, this.accountId);
-            int done = stm.executeUpdate();
-            if (done > 0) {
-                return true;
-            }
+            done = stm.executeUpdate();
+            
         } catch (SQLException ex) {
             System.out.println(ex);
 
         }
-        return false;
+        return done>0;
     }
 
     public boolean withdraw(int accountId, double money) {
         Connection con = null;
         double balance;
+        int done = 0;
         try {
             con = ConnectionBuilder.getConnection();
             String sqlUpdate = "UPDATE account SET balance=? WHERE account_id=?";
@@ -110,15 +110,13 @@ public class Account {
                 double b = balance - money;
                 stm.setDouble(1, b);
                 stm.setInt(2, this.accountId);
-                int done = stm.executeUpdate();
-                if (done > 0) {
-                    return true;
-                }
+                done = stm.executeUpdate();
+               
             }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        return false;
+        return done>0;
     }
 
     public static void transfer(double money, int accountId1, int accountId2) {

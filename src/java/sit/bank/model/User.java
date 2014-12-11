@@ -273,6 +273,7 @@ public class User {
             String address, String road,
             String subDistrict, String district, String country,
             String province, String zip, int userId) {
+        int result = 0;
         try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "UPDATE u SET u.fullname=?,u.lastname=?,u.sex=?,u.identification=?,"
@@ -297,16 +298,13 @@ public class User {
             ps.setString(13, province);
             ps.setString(14, zip);
             ps.setInt(15, userId);
-            int result = ps.executeUpdate();
-            if (result > 0) {
-                result = ps.executeUpdate();
-                return true;
-            }
+            result = ps.executeUpdate();
+            
         } catch (SQLException ex) {
             System.out.println(ex);
         }
 
-        return false;
+        return result>0;
     }
     
     
