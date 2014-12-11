@@ -23,18 +23,18 @@ import org.kohsuke.rngom.ast.builder.BuildException;
  */
 public class Account {
 
-    private int accountId;
+    private long accountId;
     private String accountName;
     private String type;
     private Double balance;
-    private int userId;
+    private long userId;
     private List<Transaction> transactions = null;
 
     Account() {
 
     }
 
-    Account(int accountId, String accountName, String type, Double balance, int userId) {
+    Account(long accountId, String accountName, String type, Double balance, long userId) {
         this.accountId = accountId;
         this.accountName = accountName;
         this.type = type;
@@ -42,11 +42,11 @@ public class Account {
         this.balance = balance;
     }
 
-    public int getAccountId() {
+    public long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(int accountId) {
+    public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
 
@@ -74,15 +74,15 @@ public class Account {
         this.balance = balance;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public boolean deposit(int accountId, double money) {
+    public boolean deposit(long accountId, double money) {
         Connection con = null;
         int done = 0;
         try {
@@ -91,7 +91,7 @@ public class Account {
             PreparedStatement stm = con.prepareStatement(sqlUpdate);
             double balance = this.getBalance();
             stm.setDouble(1, balance + money);
-            stm.setInt(2, this.accountId);
+            stm.setLong(2, this.accountId);
             done = stm.executeUpdate();
             Transaction t = new Transaction();
             t.setAmount(money);
@@ -105,7 +105,7 @@ public class Account {
         return done > 0;
     }
 
-    public boolean withdraw(int accountId, double money) {
+    public boolean withdraw(long accountId, double money) {
         Connection con = null;
         double balance;
         int done = 0;
@@ -117,7 +117,7 @@ public class Account {
             if (balance - money > 0) {
                 double b = balance - money;
                 stm.setDouble(1, b);
-                stm.setInt(2, this.accountId);
+                stm.setLong(2, this.accountId);
                 done = stm.executeUpdate();
                 Transaction t = new Transaction();
                 t.setAmount(money);
@@ -131,7 +131,7 @@ public class Account {
         return done > 0;
     }
 
-    public void transfer(double money, int accountId1, int accountId2) {
+    public void transfer(double money, long accountId1, long accountId2) {
         Connection con = null;
         Account a = null;
         a.withdraw(accountId1, money);
@@ -143,9 +143,9 @@ public class Account {
         addTransaction(t);
     }
 
-    public boolean checkInt(String account) {
+    public boolean checkLong(String account) {
         try {
-            Integer.parseInt(account);
+            Long.parseLong(account);
             return true;
         } catch (Exception ex) {
             System.out.println("Not number" + ex);
@@ -159,10 +159,10 @@ public class Account {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "";
             PreparedStatement ps;
-            if (checkInt(account)) {
+            if (checkLong(account)) {
                 sql = "SELECT * FROM Account WHERE Account_Id = ?";
                 ps = con.prepareStatement(sql);
-                ps.setInt(1, Integer.parseInt(account));
+                ps.setLong(1, Long.parseLong(account));
             } else {
                 sql = "SELECT * FROM Account WHERE Account_Name = ?";
                 ps = con.prepareStatement(sql);
@@ -171,11 +171,11 @@ public class Account {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 ac = new Account();
-                ac.setAccountId(rs.getInt("Account_Id"));
+                ac.setAccountId(rs.getLong("Account_Id"));
                 ac.setAccountName(rs.getString("Account_Name"));
                 ac.setType(rs.getString("Type"));
                 ac.setBalance(rs.getDouble("Balance"));
-                ac.setUserId(rs.getInt("User_Id"));
+                ac.setUserId(rs.getLong("User_Id"));
             }
 
         } catch (SQLException ex) {

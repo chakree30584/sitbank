@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class User {
 
     //UserInfo Table
-    private int userId;
+    private long userId;
     private String fullName;
     private String lastName;
     private String sex;
@@ -31,7 +31,7 @@ public class User {
     private String homePhone;
 
     //Address Table
-    private int homeId;
+    private long homeId;
     private String address;
     private String road;
     private String subDistrict;
@@ -42,11 +42,11 @@ public class User {
 
     private Account myAccount;
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -106,11 +106,11 @@ public class User {
         this.homePhone = homePhone;
     }
 
-    public int getHomeId() {
+    public long getHomeId() {
         return homeId;
     }
 
-    public void setHomeId(int homeId) {
+    public void setHomeId(long homeId) {
         this.homeId = homeId;
     }
 
@@ -179,11 +179,11 @@ public class User {
     }
 
     public boolean addUser(String fullName,
-            String lastName, String sex, String identification,
-            String email, String mobilePhone, String homePhone,
-            String address, String road,
-            String subDistrict, String district, String country,
-            String province, String zip) {
+        String lastName, String sex, String identification,
+        String email, String mobilePhone, String homePhone,
+        String address, String road,
+        String subDistrict, String district, String country,
+        String province, String zip) {
         int result = 0;
         int result2 = 0;
 
@@ -213,7 +213,7 @@ public class User {
                     ps2.setString(5, country);
                     ps2.setString(6, province);
                     ps2.setString(7, zip);
-                    ps2.setInt(8, rs.getInt("User_Id"));
+                    ps2.setLong(8, rs.getLong("User_Id"));
 
                     result2 = ps2.executeUpdate();
                 }
@@ -226,13 +226,13 @@ public class User {
         return result > 0 && result2 > 0;
     }// เปิดบัญชี
 
-    public List<User> findByUserId(int userId) {
+    public List<User> findByUserId(long userId) {
         List<User> result = new ArrayList<User>();
         try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.User_Id = ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, userId);
+            ps.setLong(1, userId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 User u = new User();
@@ -243,20 +243,20 @@ public class User {
                 u.setIdentification(rs.getString("Identification"));
                 u.setMobilePhone(rs.getString("MobilePhone"));
                 u.setSex(rs.getString("Sex"));
-                u.setUserId(rs.getInt("User_Id"));
+                u.setUserId(rs.getLong("User_Id"));
 
                 u.setAddress(rs.getString("Address_Id"));
                 u.setCountry(rs.getString("Country"));
                 u.setDistrict(rs.getString("District"));
-                u.setHomeId(rs.getInt("Home_Id"));
+                u.setHomeId(rs.getLong("Home_Id"));
                 u.setProvince(rs.getString("Province"));
                 u.setRoad(rs.getString("Road"));
                 u.setSubDistrict(rs.getString("Subdistrict"));
                 u.setZip(rs.getString("Zip"));
 
-                u.setMyAccount(new Account(rs.getInt("Account_Id"),
+                u.setMyAccount(new Account(rs.getLong("Account_Id"),
                         rs.getString("Account_Name"), rs.getString("Type"),
-                        rs.getDouble("Balance"), rs.getInt("User_Id")));
+                        rs.getDouble("Balance"), rs.getLong("User_Id")));
 
                 result.add(u);
             }
@@ -272,7 +272,7 @@ public class User {
             String email, String mobilePhone, String homePhone,
             String address, String road,
             String subDistrict, String district, String country,
-            String province, String zip, int userId) {
+            String province, String zip, long userId) {
         int result = 0;
         try {
             Connection con = ConnectionBuilder.getConnection();
@@ -297,7 +297,7 @@ public class User {
             ps.setString(12, country);
             ps.setString(13, province);
             ps.setString(14, zip);
-            ps.setInt(15, userId);
+            ps.setLong(15, userId);
             result = ps.executeUpdate();
             
         } catch (SQLException ex) {
