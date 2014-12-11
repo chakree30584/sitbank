@@ -30,5 +30,12 @@ public class test {
         //System.out.println("Regis: "+new User().regisEBank("Man", "12345", "1101500716771"));
         
         //System.out.println("Update: "+new User().resetPassword("Man", "1234"));
+        /*System.out.println(new User().addUser("Aon", "Duan", 
+                "Male", "1102399471003", "aonit18@gmail.com", 
+                "0811111111", "022221432", "123/45",
+                "Phutthabucha", "Bangkoknoi", "Bangmod", 
+                "Bangkok", "Thailand", "10110"));
+        */
+        System.out.println(new User().findByUserId(1).get(0).getMyAccount().getType());
     }
 }

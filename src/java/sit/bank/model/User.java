@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package sit.bank.model;
 
 import java.sql.Connection;
@@ -20,6 +19,7 @@ import java.util.logging.Logger;
  * @author Man
  */
 public class User {
+
     //UserInfo Table
     private int userId;
     private String fullName;
@@ -29,7 +29,7 @@ public class User {
     private String email;
     private String mobilePhone;
     private String homePhone;
-    
+
     //Address Table
     private int homeId;
     private String address;
@@ -39,17 +39,277 @@ public class User {
     private String country;
     private String province;
     private String zip;
+
+    private Account myAccount;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getIdentification() {
+        return identification;
+    }
+
+    public void setIdentification(String identification) {
+        this.identification = identification;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
+    }
+
+    public String getHomePhone() {
+        return homePhone;
+    }
+
+    public void setHomePhone(String homePhone) {
+        this.homePhone = homePhone;
+    }
+
+    public int getHomeId() {
+        return homeId;
+    }
+
+    public void setHomeId(int homeId) {
+        this.homeId = homeId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getRoad() {
+        return road;
+    }
+
+    public void setRoad(String road) {
+        this.road = road;
+    }
+
+    public String getSubDistrict() {
+        return subDistrict;
+    }
+
+    public void setSubDistrict(String subDistrict) {
+        this.subDistrict = subDistrict;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public Account getMyAccount() {
+        return myAccount;
+    }
+
+    public void setMyAccount(Account myAccount) {
+        this.myAccount = myAccount;
+    }
+
+    public boolean addUser(String fullName,
+            String lastName, String sex, String identification,
+            String email, String mobilePhone, String homePhone,
+            String address, String road,
+            String subDistrict, String district, String country,
+            String province, String zip) {
+        int result = 0;
+        int result2 = 0;
+
+        try {
+            Connection con = ConnectionBuilder.getConnection();
+            String sql = "INSERT INTO UserInfo Values (null, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, fullName);
+            ps.setString(2, lastName);
+            ps.setString(3, sex);
+            ps.setString(4, identification);
+            ps.setString(5, email);
+            ps.setString(6, mobilePhone);
+            ps.setString(7, homePhone);
+            result = ps.executeUpdate();
+            if (result > 0) {
+                String sqlGet = "SELECT User_Id FROM UserInfo WHERE identification = '" + identification + "'";
+                PreparedStatement psGet = con.prepareStatement(sqlGet);
+                ResultSet rs = psGet.executeQuery();
+                if (rs.next()) {
+                    String sql2 = "INSERT INTO Address Values (null, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    PreparedStatement ps2 = con.prepareStatement(sql2);
+                    ps2.setString(1, address);
+                    ps2.setString(2, road);
+                    ps2.setString(3, subDistrict);
+                    ps2.setString(4, district);
+                    ps2.setString(5, country);
+                    ps2.setString(6, province);
+                    ps2.setString(7, zip);
+                    ps2.setInt(8, rs.getInt("User_Id"));
+
+                    result2 = ps2.executeUpdate();
+                }
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("sql add error: " + ex);
+        }
+
+        return result > 0 && result2 > 0;
+    }// เปิดบัญชี
+
+    public List<User> findByUserId(int userId) {
+        List<User> result = new ArrayList<User>();
+        try {
+            Connection con = ConnectionBuilder.getConnection();
+            String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.User_Id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User u = new User();
+                u.setFullName(rs.getString("Fullname"));
+                u.setLastName(rs.getString("Lastname"));
+                u.setEmail(rs.getString("Email"));
+                u.setHomePhone(rs.getString("HomePhone"));
+                u.setIdentification(rs.getString("Identification"));
+                u.setMobilePhone(rs.getString("MobilePhone"));
+                u.setSex(rs.getString("Sex"));
+                u.setUserId(rs.getInt("User_Id"));
+
+                u.setAddress(rs.getString("Address_Id"));
+                u.setCountry(rs.getString("Country"));
+                u.setDistrict(rs.getString("District"));
+                u.setHomeId(rs.getInt("Home_Id"));
+                u.setProvince(rs.getString("Province"));
+                u.setRoad(rs.getString("Road"));
+                u.setSubDistrict(rs.getString("Subdistrict"));
+                u.setZip(rs.getString("Zip"));
+
+                u.setMyAccount(new Account(rs.getInt("Account_Id"),
+                        rs.getString("Account_Name"), rs.getString("Type"),
+                        rs.getDouble("Balance"), rs.getInt("User_Id")));
+
+                result.add(u);
+            }
+        } catch (SQLException ex) {
+            System.out.println("sql find By User Id error: " + ex);
+        }
+
+        return result;
+    }
+
+    public boolean update(String fullName,
+            String lastName, String sex, String identification,
+            String email, String mobilePhone, String homePhone,
+            String address, String road,
+            String subDistrict, String district, String country,
+            String province, String zip, int userId) {
+        try {
+            Connection con = ConnectionBuilder.getConnection();
+            String sql = "UPDATE u SET u.fullname=?,u.lastname=?,u.sex=?,u.identification=?,"
+                    + "u.email=?,u.mobilephone=?,u.homephone=?, a.address_id=?, a.road=?, a.district=?, "
+                    + "a.subdistrict=?, a.province=?, a.country=?, a.zip=? "
+                    + "FROM user AS u INNER JOIN address AS a"
+                    + "ON u.user_id = a.user_id "
+                    + "WHERE u.user_id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, fullName);
+            ps.setString(2, lastName);
+            ps.setString(3, sex);
+            ps.setString(4, identification);
+            ps.setString(5, email);
+            ps.setString(6, mobilePhone);
+            ps.setString(7, homePhone);
+            ps.setString(8, address);
+            ps.setString(9, road);
+            ps.setString(10, subDistrict);
+            ps.setString(11, district);
+            ps.setString(12, country);
+            ps.setString(13, province);
+            ps.setString(14, zip);
+            ps.setInt(15, userId);
+            int result = ps.executeUpdate();
+            if (result > 0) {
+                result = ps.executeUpdate();
+                return true;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+
+        return false;
+    }
     
     
     
-    
-   
-    
-    
-    
-    
-    
-   
-    
-    
+
 }
