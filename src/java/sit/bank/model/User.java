@@ -243,7 +243,6 @@ public class User {
                         Transaction trans = new Transaction();
                         trans.setAmount(0);
                         trans.setTransactionCode(Transaction.TransactionCode.ADU);
-                        trans.setTransactionDateTime(new Date(System.currentTimeMillis()));
                         addTransaction(0, trans);
 
                     }

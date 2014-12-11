@@ -40,7 +40,7 @@ public class Transaction implements Serializable {
     
     private long transactionId;
     private TransactionCode transactionCode;
-    private Date transactionDateTime;
+    private String transactionDateTime;
     private double amount;
 
     public long getTransactionId() {
@@ -59,11 +59,11 @@ public class Transaction implements Serializable {
         this.transactionCode = transactionCode;
     }
 
-    public Date getTransactionDateTime() {
+    public String getTransactionDateTime() {
         return transactionDateTime;
     }
 
-    public void setTransactionDateTime(Date transactionDateTime) {
+    public void setTransactionDateTime(String transactionDateTime) {
         this.transactionDateTime = transactionDateTime;
     }
 
@@ -102,7 +102,7 @@ public class Transaction implements Serializable {
 
     private static void orm(ResultSet rs, Transaction t) throws SQLException {
         t.setAmount(rs.getDouble("amount"));
-        t.setTransactionDateTime(rs.getDate("transaction_date"));
+        t.setTransactionDateTime(rs.getString("transaction_date"));
         t.setTransactionId(rs.getLong("transaction_id"));
         t.setTransactionCode(TransactionCode.valueOf(rs.getString("transaction_code")));
     }
@@ -112,12 +112,11 @@ public class Transaction implements Serializable {
         try {
             Connection conn = ConnectionBuilder.getConnection();
             Transaction t = null;
-            String sqlCmd = "INSERT INTO transactions (account_id, transaction_code, transaction_date, amount) VALUES (?, ?, ?, ?)";
+            String sqlCmd = "INSERT INTO transactions (account_id, transaction_code, transaction_date, amount) VALUES (?, ?, now(), ?)";
             PreparedStatement pstm = conn.prepareStatement(sqlCmd);
             pstm.setLong(1, acid);
             pstm.setString(2, this.transactionCode.name());
-            pstm.setDate(3, new java.sql.Date(this.transactionDateTime.getTime()));
-            pstm.setDouble(4, amount);
+            pstm.setDouble(3, amount);
             x = pstm.executeUpdate();
             conn.close();
         } catch (SQLException ex) {

@@ -4,9 +4,17 @@
         <servlet-name>Main</servlet-name>
         <servlet-class>sit.bank.servlet.Main</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchAjaxServlet</servlet-name>
+        <servlet-class>sit.bank.servlet.SearchAjaxServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Main</servlet-name>
         <url-pattern>/Main</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchAjaxServlet</servlet-name>
+        <url-pattern>/SearchAjaxServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

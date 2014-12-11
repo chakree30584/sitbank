@@ -162,7 +162,10 @@
                 clearTimeout(searchtimeout);
                 $("#accsearchloader").fadeIn(500);
                 searchtimeout = setTimeout(function(){
-                    
+                    var input = $("#accsearchbox").val();
+                    if(isNaN(input)){
+                        
+                    }
                     $("#accsearchloader").fadeOut(500);
                 },1000);
                 }

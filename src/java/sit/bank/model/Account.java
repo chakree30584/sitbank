@@ -10,12 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.kohsuke.rngom.ast.builder.BuildException;
 
 /**
  *
@@ -96,7 +91,6 @@ public class Account {
             Transaction t = new Transaction();
             t.setAmount(money);
             t.setTransactionCode(Transaction.TransactionCode.CSD);
-            t.setTransactionDateTime(new Date(System.currentTimeMillis()));
             addTransaction(t);
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -122,7 +116,6 @@ public class Account {
                 Transaction t = new Transaction();
                 t.setAmount(money);
                 t.setTransactionCode(Transaction.TransactionCode.CSW);
-                t.setTransactionDateTime(new Date(System.currentTimeMillis()));
                 addTransaction(t);
             }
         } catch (SQLException ex) {
@@ -139,7 +132,6 @@ public class Account {
         Transaction t = new Transaction();
         t.setAmount(money);
         t.setTransactionCode(Transaction.TransactionCode.CSD);
-        t.setTransactionDateTime(new Date(System.currentTimeMillis()));
         addTransaction(t);
     }
 
