@@ -10,11 +10,6 @@ package sit.bank.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-
 /**
  *
  * @author Man
@@ -22,7 +17,6 @@ import java.util.logging.Logger;
 public class UserEBank {
     private String userName;
     private String password;
-
     private int accountId;
 
     public String getUserName() {
@@ -75,11 +69,25 @@ public class UserEBank {
     }
     
     
-
-    
-    
-    
-
-    
+    public boolean resetPassword(int userId, String oldPass, String newPass){
+        Connection con = null;
+        this.password = null;
+        try{
+            con = ConnectionBuilder.getConnection();
+            String sqlCmd = "UPDATE userEBank SET password=? WHERE user_id=?";
+            PreparedStatement stm = null;
+            if(oldPass.equals(password)){
+                stm.setString(1, newPass);
+                stm.setInt(2, userId);
+                int done = stm.executeUpdate();
+                if(done>0){
+                    return true;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return false;
+    }
     
 }
