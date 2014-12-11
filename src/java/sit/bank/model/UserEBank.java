@@ -46,6 +46,8 @@ public class UserEBank {
         this.userId = userId;
     }
     
+    
+    
     public static boolean resetPassword(int userId, String oldPass, String newPass){
         Connection con = null;
         try{
