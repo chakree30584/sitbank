@@ -10,18 +10,8 @@ import java.util.InputMismatchException;
  * @author peacepeace
  */
 public class NumberToText {
+
     
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-// ให้ทำการรับค่าตัวเลข และทำการเปลี่ยนให้เป็นคำ เช่น input 20 output ยี่สิบ , input 200 output สองร้อย
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         String number[] = {"","หนึ่ง","สอง","สาม","สี่","ห้า","หก","เจ็ด","แปด","เก้า"};
         String c[] = {"","สิบ","ร้อย","พัน","หมื่น","แสน","ล้าน","สิบ","ร้อย","พัน","หมื่น","แสน","ล้าน"};
@@ -31,7 +21,7 @@ public class NumberToText {
         try{
             x = new java.util.Scanner(System.in).nextInt();
         }catch(InputMismatchException im){
-            System.out.println("กรอกตัวเลขไม่เกิน x หลัก");
+            System.out.println("Insert Number Limit (Same X)");
             check = false;
         }
         if(check){
