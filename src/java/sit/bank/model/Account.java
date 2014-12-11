@@ -168,7 +168,7 @@ public class Account {
         ArrayList<Account> arr = new ArrayList<Account>();
         try {
             Connection con = ConnectionBuilder.getConnection();
-            String sql = "SELECT * FROM Account WHERE Account_Id = ?";
+            String sql = "SELECT * FROM Account WHERE User_Id = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setLong(1, accid);
             ResultSet rs = ps.executeQuery();

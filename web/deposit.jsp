@@ -85,13 +85,15 @@
                     <div class="modal-header">
                         <h3 class="modal-title">ค้นหาบัญชีเงินฝาก</h3>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body"  style="min-height:200px;">
                         <div class="input-group input-group-lg">
                             <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
                             <input type="text" class="form-control money-lg" id="accsearchbox">
                         </div>
                         <div id="accsearchloader" style="display:none; width:100%; text-align: center; padding-top:30px; padding-bottom:10px;">
                             <img src="assets/img/loader0.gif" style="width:50px;">
+                        </div>
+                        <div id="accsearchoutput">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -100,9 +102,9 @@
                 </div>
             </div>
         </div>
-        
+
         <!--Account Select Modal-->
-        <div class="modal fade" id="accsearchmodal" data-backdrop="static" data-keyboard="false" >
+        <div class="modal fade" id="accselectmodal" data-backdrop="static" data-keyboard="false" >
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -120,7 +122,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!--Confirm Modal-->
         <div class="modal fade" id="confirmmodal">
             <div class="modal-dialog">
@@ -147,31 +149,59 @@
             $(document).ready(function (e) {
                 $("#accsearchmodal").modal("show");
             });
-            
+
             $(".accsearchbtn").on("click", function (e) {
                 $("#accsearchmodal").modal("show");
                 $("#accsearchbox").val("");
+                $("#accsearchoutput").html("");
                 $("#accsearchbox").focus();
             });
             var searchtimeout;
-            $("#accsearchbox").on("keyup",function(e){
-                if($("#accsearchbox").val().length == 0){
+            $("#accsearchbox").on("keyup", function (e) {
+                $("#accsearchoutput").html("");
+                if ($("#accsearchbox").val().length == 0) {
                     clearTimeout(searchtimeout);
-                    $("#accsearchloader").fadeOut(500);
-                }else{
-                clearTimeout(searchtimeout);
-                $("#accsearchloader").fadeIn(500);
-                searchtimeout = setTimeout(function(){
-                    var input = $("#accsearchbox").val();
-                    if(isNaN(input)){
-                        
-                    }else{
-                        
-                    }
-                    $("#accsearchloader").fadeOut(500);
-                },1000);
+                    $("#accsearchloader").fadeOut(200);
+                } else {
+                    clearTimeout(searchtimeout);
+                    $("#accsearchloader").fadeIn(200);
+                    searchtimeout = setTimeout(function () {
+                        var input = $("#accsearchbox").val();
+                        if (isNaN(input)) {
+                            search(input, "name");
+                        } else {
+                            search(input, "id");
+                        }
+                        $("#accsearchloader").fadeOut(0);
+                    }, 1000);
                 }
             });
+            function search(input, type) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "SearchAjaxServlet",
+                    data: {'type': type, 'searchValue': input},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.result == 1) {
+                            $.each(data.acc, function (i, acc) {
+                                console.log(acc);
+                                var result = '<br><div class="panel panel-primary animated fadeIn"><div class="panel-body searchaccbody"><table><tr><td width="100"><h1><span style="font-size:2em;"><span class="glyphicon glyphicon-user"></span></span></h1></td><td>';
+                                result += '<span style="font-size:2em;">'+acc.fullName+' '+acc.lastName+'</span><br>';
+                                result += acc.address+' '+acc.road+' '+acc.subDistrict+' '+acc.district+'<br>'+acc.province+','+acc.country+' '+acc.zip+'<br>';
+                                result += acc.homePhone+' '+acc.mobilePhone;
+                                result += '</td></tr></table></div></div>';
+                                $("#accsearchoutput").append(result);
+                            });
+                        } else {
+                            $("#accsearchoutput").html("<h3 style='text-align:center; width:100%;'>Not Found</h3>")
+                        }
+                    }
+                }).done(function () {
+                }).error(function (jqXHR, textStatus, errorThrown) {
+                });
+            }
         </script>
     </body>
 </html>

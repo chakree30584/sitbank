@@ -16,7 +16,7 @@ public class ConnectionBuilder {
         } catch (ClassNotFoundException ex) {
             System.err.println(ex);
         } catch (SQLException ex) {
-            System.err.println(ex);
+            System.err.println("SQLException : "+ex);
         }
         return null;
     }

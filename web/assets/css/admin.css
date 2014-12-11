@@ -25,3 +25,12 @@
 .money-lg{
     font-size:40px;
 }
+.searchaccbody{
+    cursor: pointer;
+}
+.searchaccbody:hover{
+    background-color:rgba(230,230,230,0.5);
+}
+.searchaccbody:hover{
+    background-color:rgba(230,230,230,0.9);
+}

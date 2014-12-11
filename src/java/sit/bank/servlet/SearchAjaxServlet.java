@@ -29,29 +29,26 @@ public class SearchAjaxServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String searchValue = request.getParameter("searchValue");
         String type = request.getParameter("type");
-        System.out.println(type);
         JSONObject json = new JSONObject();
         if (type.equals("name")) {
             List<User> ac = User.findByName(searchValue);
-            if (ac == null) {
+            if (ac.size()==0) {
                 json.put("result", 0);
             } else {
                 json.put("result", 1);
                 json.put("acc", ac);
             }
         }else if(type.equals("id")){
-            Account ac = Account.findByAccountId(Long.parseLong(searchValue));
+            List<User> ac = User.findByAccIdGetUser(Long.parseLong(searchValue));
             if (ac == null) {
                 json.put("result", 0);
             } else {
-                List li = new ArrayList();
-                li.add(ac);
                 json.put("result", 1);
-                json.put("acc", li);
+                json.put("acc", ac);
             }
         }else if(type.equals("getacc")){
             List<Account> ac = Account.findAccountOfUid(Long.parseLong(searchValue));
-            if (ac == null) {
+            if (ac.size()==0) {
                 json.put("result", 0);
             } else {
                 json.put("result", 1);

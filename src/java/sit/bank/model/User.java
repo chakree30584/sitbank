@@ -210,8 +210,7 @@ public class User {
         try {
             Connection con = ConnectionBuilder.getConnection();
             ResultSet rs = null;
-            String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id "
-                    + "INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.User_Id = ?";
+            String sql = "SELECT * FROM UserInfo U JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.User_Id = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setLong(1, userId);
             rs = ps.executeQuery();
@@ -221,7 +220,19 @@ public class User {
         } catch (SQLException ex) {
             System.out.println("sql find By User Id error: " + ex);
         }
+        System.out.println("null");
         return null;
+    }
+
+    public static List<User> findByAccIdGetUser(long id) {
+        Account ac = Account.findByAccountId(id);
+        if (ac == null) {
+            return null;
+        } else {
+            ArrayList<User> arr = new ArrayList();
+            arr.add(findByUserId(ac.getUserId()));
+            return arr;
+        }
     }
 
     public static List<User> findByName(String name) {
@@ -229,10 +240,9 @@ public class User {
         try {
             Connection con = ConnectionBuilder.getConnection();
             ResultSet rs = null;
-            String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id "
-                    + "INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.Fullname = ?";
+            String sql = "SELECT * FROM UserInfo U JOIN Address AD ON U.User_Id = AD.User_Id WHERE UPPER(U.Fullname) like ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, name + "%");
+            ps.setString(1, name.toUpperCase() + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 arr.add(convertResultSetToUserObject(rs));
