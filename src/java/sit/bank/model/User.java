@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
 public class User {
 
     //UserInfo Table
-    private int userId;
+    private long userId;
     private String fullName;
     private String lastName;
     private String sex;
@@ -31,7 +32,7 @@ public class User {
     private String homePhone;
 
     //Address Table
-    private int homeId;
+    private long homeId;
     private String address;
     private String road;
     private String subDistrict;
@@ -42,11 +43,20 @@ public class User {
 
     private Account myAccount;
 
-    public int getUserId() {
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+    private List<Transaction> transactions = null;
+
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -106,11 +116,11 @@ public class User {
         this.homePhone = homePhone;
     }
 
-    public int getHomeId() {
+    public long getHomeId() {
         return homeId;
     }
 
-    public void setHomeId(int homeId) {
+    public void setHomeId(long homeId) {
         this.homeId = homeId;
     }
 
@@ -183,10 +193,10 @@ public class User {
             String email, String mobilePhone, String homePhone,
             String address, String road,
             String subDistrict, String district, String country,
-            String province, String zip) {
+            String province, String zip, String accountName, String type, double money) {
         int result = 0;
         int result2 = 0;
-
+        int lastresult = 0;
         try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "INSERT INTO UserInfo Values (null, ?, ?, ?, ?, ?, ?, ?)";
@@ -204,6 +214,8 @@ public class User {
                 PreparedStatement psGet = con.prepareStatement(sqlGet);
                 ResultSet rs = psGet.executeQuery();
                 if (rs.next()) {
+                    //add address table
+                    long iduser = rs.getLong("User_Id");
                     String sql2 = "INSERT INTO Address Values (null, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement ps2 = con.prepareStatement(sql2);
                     ps2.setString(1, address);
@@ -213,9 +225,28 @@ public class User {
                     ps2.setString(5, country);
                     ps2.setString(6, province);
                     ps2.setString(7, zip);
-                    ps2.setInt(8, rs.getInt("User_Id"));
-
+                    ps2.setLong(8, iduser);
                     result2 = ps2.executeUpdate();
+                    
+
+                    if (result2 > 0) {
+                        //add account table
+                        String sql3 = "INSERT INTO Account Values (null, ?, ?, ?, ?)";
+                        PreparedStatement ps3 = con.prepareStatement(sql3);
+                        ps3.setString(1, accountName);
+                        ps3.setString(2, type);
+                        ps3.setDouble(3, money);
+                        ps3.setLong(4, iduser);
+                        lastresult = ps3.executeUpdate();
+                        
+                        con.close();
+                        Transaction trans = new Transaction();
+                        trans.setAmount(0);
+                        trans.setTransactionCode(Transaction.TransactionCode.ADU);
+                        trans.setTransactionDateTime(new Date(System.currentTimeMillis()));
+                        addTransaction(0, trans);
+
+                    }
                 }
             }
 
@@ -223,16 +254,16 @@ public class User {
             System.out.println("sql add error: " + ex);
         }
 
-        return result > 0 && result2 > 0;
+        return result > 0 && result2 > 0 && lastresult > 0;
     }// เปิดบัญชี
 
-    public List<User> findByUserId(int userId) {
+    public List<User> findByUserId(long userId) {
         List<User> result = new ArrayList<User>();
         try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.User_Id = ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, userId);
+            ps.setLong(1, userId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 User u = new User();
@@ -243,20 +274,20 @@ public class User {
                 u.setIdentification(rs.getString("Identification"));
                 u.setMobilePhone(rs.getString("MobilePhone"));
                 u.setSex(rs.getString("Sex"));
-                u.setUserId(rs.getInt("User_Id"));
+                u.setUserId(rs.getLong("User_Id"));
 
                 u.setAddress(rs.getString("Address_Id"));
                 u.setCountry(rs.getString("Country"));
                 u.setDistrict(rs.getString("District"));
-                u.setHomeId(rs.getInt("Home_Id"));
+                u.setHomeId(rs.getLong("Home_Id"));
                 u.setProvince(rs.getString("Province"));
                 u.setRoad(rs.getString("Road"));
                 u.setSubDistrict(rs.getString("Subdistrict"));
                 u.setZip(rs.getString("Zip"));
 
-                u.setMyAccount(new Account(rs.getInt("Account_Id"),
+                u.setMyAccount(new Account(rs.getLong("Account_Id"),
                         rs.getString("Account_Name"), rs.getString("Type"),
-                        rs.getDouble("Balance"), rs.getInt("User_Id")));
+                        rs.getDouble("Balance"), rs.getLong("User_Id")));
 
                 result.add(u);
             }
@@ -272,7 +303,8 @@ public class User {
             String email, String mobilePhone, String homePhone,
             String address, String road,
             String subDistrict, String district, String country,
-            String province, String zip, int userId) {
+            String province, String zip, long userId) {
+        int result = 0;
         try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "UPDATE u SET u.fullname=?,u.lastname=?,u.sex=?,u.identification=?,"
@@ -296,20 +328,37 @@ public class User {
             ps.setString(12, country);
             ps.setString(13, province);
             ps.setString(14, zip);
-            ps.setInt(15, userId);
-            int result = ps.executeUpdate();
-            if (result > 0) {
-                result = ps.executeUpdate();
-                return true;
+            ps.setLong(15, userId);
+            result = ps.executeUpdate();
+            
+            if (getTransactions() != null) {
+                for (Transaction trans : getTransactions()) {
+                    if (trans.getTransactionId() == 0) {
+                        trans.writeTransaction(userId);
+                    }
+                }
+                transactions.clear();
             }
+
         } catch (SQLException ex) {
             System.out.println(ex);
         }
 
-        return false;
+        return result > 0;
     }
-    
-    
-    
+
+    private void addTransaction(Transaction t) {
+        if (transactions == null) {
+            transactions = new ArrayList<Transaction>();
+        }
+        transactions.add(t);
+    }
+
+    private void addTransaction(int x, Transaction t) {
+        if (transactions == null) {
+            transactions = new ArrayList<Transaction>();
+        }
+        transactions.add(x, t);
+    }
 
 }

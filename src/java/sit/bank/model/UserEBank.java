@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class UserEBank {
     private String userName;
     private String password;
-    private int accountId;
+    private long accountId;
 
     public String getUserName() {
         return userName;
@@ -38,11 +38,11 @@ public class UserEBank {
         this.password = password;
     }
 
-    public int getAccountId() {
+    public long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(int accountId) {
+    public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
 
@@ -50,7 +50,7 @@ public class UserEBank {
 
     
     
-    public boolean addUserE(String user, String pass, int accountId){
+    public boolean addUserE(String user, String pass, long accountId){
         int save = 0;
         try{
             Connection con = ConnectionBuilder.getConnection();
@@ -59,7 +59,7 @@ public class UserEBank {
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setString(1, user);
                 ps.setString(2, pass);
-                ps.setInt(3, accountId);
+                ps.setLong(3, accountId);
                 
                 save = ps.executeUpdate();
                 
@@ -71,26 +71,42 @@ public class UserEBank {
         return save > 0;
     }
     
+    public boolean setUserEBank(String username, String password, long userId){
+        Connection con = null;
+        int done = 0;
+        try{
+            con = ConnectionBuilder.getConnection();
+            String sqlCmd = "INSERT INTO userEBank(username, password, userId) VALUES(?,?,?)";
+            PreparedStatement stm = con.prepareStatement(sqlCmd);
+            stm.setString(1, username);
+            stm.setString(2, password);
+            stm.setLong(3, userId);
+            done = stm.executeUpdate();
+           
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return done>0;
+    }
     
-    public boolean resetPassword(int userId, String oldPass, String newPass){
+    public boolean resetPassword(long userId, String oldPass, String newPass){
         Connection con = null;
         this.password = null;
+        int done = 0;
         try{
             con = ConnectionBuilder.getConnection();
             String sqlCmd = "UPDATE userEBank SET password=? WHERE user_id=?";
             PreparedStatement stm = null;
             if(oldPass.equals(password)){
                 stm.setString(1, newPass);
-                stm.setInt(2, userId);
-                int done = stm.executeUpdate();
-                if(done>0){
-                    return true;
-                }
+                stm.setLong(2, userId);
+                done = stm.executeUpdate();
+                
             }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        return false;
+        return done >0;
     }
     
 }
