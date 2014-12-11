@@ -48,14 +48,16 @@ public class UserEBank {
     
     
     
-    public static boolean resetPassword(int userId, String oldPass, String newPass){
+    public boolean resetPassword(int userId, String oldPass, String newPass){
+        String password = this.password;
         Connection con = null;
         try{
             con = ConnectionBuilder.getConnection();
             String sqlCmd = "UPDATE userEBank SET password=? WHERE user_id=?";
             PreparedStatement stm = null;
-            if(oldPass.equals(newPass)){
+            if(oldPass.equals(password)){
                 stm.setString(1, newPass);
+                stm.setInt(2, userId);
                 int done = stm.executeUpdate();
                 if(done>0){
                     return true;
