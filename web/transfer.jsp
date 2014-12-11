@@ -165,14 +165,14 @@
                                     <span class='glyphicon glyphicon-arrow-right' style='font-size:3em;'></span>
                                     <div id="addamt" style="font-size:3em; padding-left:10px; padding-right:10px; min-width:300px;"></div>
                                 </td><td>
-                                <div class="panel-body" style="background-color: rgba(200,200,200,0.4); width:240px;">
-                                    <table style='margin: 0 auto;'><tr><td>
+                                    <div class="panel-body" style="background-color: rgba(200,200,200,0.4); width:240px;">
+                                        <table style='margin: 0 auto;'><tr><td>
                                                     <span style="font-size:1.5em;" id="destaccconfirmname"></span><br>
                                                     บัญชี<span id="destaccconfirmtype"></span><br>
                                                     ยอดเงิน : <span id="destaccconfirmbalance"></span>
                                                 </td></tr></table></div>
                                 </td></tr></table>
-                        
+
                         <br>
                         ยอดเงินที่โอน (ตัวหนังสือ) : <span id="accconfirmthaibaht"></span>
                     </div>
