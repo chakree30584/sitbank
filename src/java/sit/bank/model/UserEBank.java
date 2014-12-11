@@ -45,9 +45,6 @@ public class UserEBank {
     }
 
     
-
-    
-    
     public boolean addUserE(String user, String pass, long accountId){
         int save = 0;
         try{
@@ -84,7 +81,7 @@ public class UserEBank {
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        return done>0;
+        return done> 0;
     }
     
     public boolean resetPassword(long userId, String oldPass, String newPass){
@@ -104,7 +101,7 @@ public class UserEBank {
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        return done >0;
+        return done > 0;
     }
     
 }

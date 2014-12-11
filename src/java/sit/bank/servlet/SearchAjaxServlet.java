@@ -31,21 +31,32 @@ public class SearchAjaxServlet extends HttpServlet {
         String type = request.getParameter("type");
         System.out.println(type);
         JSONObject json = new JSONObject();
-        if (type.equals("searchbyname")) {
-            //User u = User.
-        } else if (type.equals("searchbyid")) {
-            Account ac = Account.findMyAccount(searchValue);
-            //List<User> ac = User.findByUserId(1);
+        if (type.equals("name")) {
+            List<User> ac = User.findByUser(searchValue);
             if (ac == null) {
                 json.put("result", 0);
-            }else{
+            } else {
+                json.put("result", 1);
+                json.put("acc", ac);
+            }
+        }else if(type.equals("id")){
+            Account ac = Account.findMyAccount(searchValue);
+            if (ac == null) {
+                json.put("result", 0);
+            } else {
                 List li = new ArrayList();
                 li.add(ac);
                 json.put("result", 1);
                 json.put("acc", li);
             }
-        } else if (type.equals("getallaccbyuid")) {
-
+        }else if(type.equals("getacc")){
+            List<User> ac = User.findByUser(searchValue);
+            if (ac == null) {
+                json.put("result", 0);
+            } else {
+                json.put("result", 1);
+                json.put("acc", ac);
+            }
         }
         try (PrintWriter out = response.getWriter()) {
             out.print(json);
