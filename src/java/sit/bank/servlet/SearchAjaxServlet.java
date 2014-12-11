@@ -54,6 +54,26 @@ public class SearchAjaxServlet extends HttpServlet {
                 json.put("result", 1);
                 json.put("acc", ac);
             }
+        }else if(type.equals("getcurrentacc")){
+            Account ac = Account.findByAccountId(Long.parseLong(searchValue));
+            if (ac == null) {
+                json.put("result", 0);
+            } else {
+                List<Account> acc = new ArrayList();
+                acc.add(ac);
+                json.put("result", 1);
+                json.put("acc", acc);
+            }
+        }else if(type.equals("getcurrentuser")){
+            User u = User.findByUserId(Long.parseLong(searchValue));
+            if (u == null) {
+                json.put("result", 0);
+            } else {
+                List<User> uu = new ArrayList();
+                uu.add(u);
+                json.put("result", 1);
+                json.put("acc", uu);
+            }
         }
         try (PrintWriter out = response.getWriter()) {
             out.print(json);

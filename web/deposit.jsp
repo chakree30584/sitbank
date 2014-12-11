@@ -20,24 +20,9 @@
 
     <body>
 
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">SIT Bank</a>
-                </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                </div><!--/.navbar-collapse -->
-            </div>
-        </nav>
+        <t:adminnavbar/>
 
         <div class="container">
-            <!-- Example row of columns -->
             <h2>ฝากเงิน</h2><br>
             <div class="row">
                 <div class="col-md-6">
@@ -50,6 +35,15 @@
                                 <span class="glyphicon glyphicon-search"></span>
                                 คลิกเพื่อค้นหาบัญชี
                             </div>
+                            <div class="accshowarea">
+                                <br><div class="panel panel-primary animated fadeIn">
+                                    <div class="panel-body"><table><tr><td width="100"><span style="font-size:6em;">
+                                                        <span class="glyphicon glyphicon-usd"></span></span></h1></td><td>
+                                                    <span style="font-size:2em;" id="accshowname"></span><br>
+                                                    บัญชี<span id="accshowtype"></span><br>
+                                                    ยอดเงิน : <span id="accshowbalance"></span>
+                                                </td></tr></table></div></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -61,12 +55,12 @@
                         <div class="panel-body" class="accpanelbody">
                             <div class="input-group input-group-lg">
                                 <span class="input-group-addon">&#3647;</span>
-                                <input type="text" class="form-control money-lg">
+                                <input type="text" class="form-control money-lg" id="moneyinput">
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <button class="btn btn-default btn-lg btn-block">ดำเนินการ</a>
+                    <button class="btn btn-success btn btn-block" id="contbtn"><span class="glyphicon glyphicon-ok"></span> ดำเนินการ</button>
+                    <button class="btn btn-warning btn btn-block" id="cancelbtn"><span class="glyphicon glyphicon-remove"></span> ยกเลิก</button>
                 </div>
 
             </div>
@@ -77,7 +71,7 @@
 
         </div> <!-- /container -->
 
-        <!--modal-->
+        
         <!--Search Modal-->
         <div class="modal fade" id="accsearchmodal" data-backdrop="static" data-keyboard="false" >
             <div class="modal-dialog">
@@ -94,6 +88,9 @@
                             <img src="assets/img/loader0.gif" style="width:50px;">
                         </div>
                         <div id="accsearchoutput">
+                            <table>
+
+                            </table>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -108,12 +105,17 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title">ค้นหาบัญชีเงินฝาก</h3>
+                        <h3 class="modal-title">ดำเนินการฝากเงินของ <span class="accselectname"></span></h3>
                     </div>
                     <div class="modal-body">
-                        <div class="input-group input-group-lg">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-                            <input type="text" class="form-control money-lg">
+                        <div id="accconfirmloader" style="display:none; width:100%; text-align: center; padding-top:30px; padding-bottom:10px;">
+                            <img src="assets/img/loader0.gif" style="width:50px;">
+                        </div>
+                        <div id="accconfirmbody">
+                            
+                        </div>
+                        <div id="accconfirmoutput">
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -125,11 +127,11 @@
 
         <!--Confirm Modal-->
         <div class="modal fade" id="confirmmodal">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Modal title</h4>
+                        <h3 class="modal-title">เลือกบัญชีเงินฝากของ <span class="accselectname"></span></h3>
                     </div>
                     <div class="modal-body">
                         <p>One fine body…</p>
@@ -145,63 +147,7 @@
 
         <script src="assets/js/jquery-2.1.1.min.js"></script>
         <script src="assets/js/bootstrap.min.js"></script>
-        <script>
-            $(document).ready(function (e) {
-                $("#accsearchmodal").modal("show");
-            });
-
-            $(".accsearchbtn").on("click", function (e) {
-                $("#accsearchmodal").modal("show");
-                $("#accsearchbox").val("");
-                $("#accsearchoutput").html("");
-                $("#accsearchbox").focus();
-            });
-            var searchtimeout;
-            $("#accsearchbox").on("keyup", function (e) {
-                $("#accsearchoutput").html("");
-                if ($("#accsearchbox").val().length == 0) {
-                    clearTimeout(searchtimeout);
-                    $("#accsearchloader").fadeOut(200);
-                } else {
-                    clearTimeout(searchtimeout);
-                    $("#accsearchloader").fadeIn(200);
-                    searchtimeout = setTimeout(function () {
-                        var input = $("#accsearchbox").val();
-                        if (isNaN(input)) {
-                            search(input, "name");
-                        } else {
-                            search(input, "id");
-                        }
-                        $("#accsearchloader").fadeOut(0);
-                    }, 1000);
-                }
-            });
-            function search(input, type) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "SearchAjaxServlet",
-                    data: {'type': type, 'searchValue': input},
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.result == 1) {
-                            $.each(data.acc, function (i, acc) {
-                                console.log(acc);
-                                var result = '<br><div class="panel panel-primary animated fadeIn"><div class="panel-body searchaccbody"><table><tr><td width="100"><h1><span style="font-size:2em;"><span class="glyphicon glyphicon-user"></span></span></h1></td><td>';
-                                result += '<span style="font-size:2em;">'+acc.fullName+' '+acc.lastName+'</span><br>';
-                                result += acc.address+' '+acc.road+' '+acc.subDistrict+' '+acc.district+'<br>'+acc.province+','+acc.country+' '+acc.zip+'<br>';
-                                result += acc.homePhone+' '+acc.mobilePhone;
-                                result += '</td></tr></table></div></div>';
-                                $("#accsearchoutput").append(result);
-                            });
-                        } else {
-                            $("#accsearchoutput").html("<h3 style='text-align:center; width:100%;'>Not Found</h3>")
-                        }
-                    }
-                }).done(function () {
-                }).error(function (jqXHR, textStatus, errorThrown) {
-                });
-            }
-        </script>
+        <script src="assets/js/deposit.js"></script>
+        
     </body>
 </html>

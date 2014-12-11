@@ -7,6 +7,7 @@
     cursor: pointer;
     border-radius: 5px;
     font-size:25px;
+    background-color:rgba(230,230,230,0.2);
 }
 .accsearchbtn:hover{
     background-color:rgba(230,230,230,0.5);
@@ -33,4 +34,14 @@
 }
 .searchaccbody:hover{
     background-color:rgba(230,230,230,0.9);
+}
+
+.accshowarea{
+    text-align: left;
+    width:100%;
+    height:200px;
+    color:grey;
+    cursor: auto;
+    border-radius: 5px;
+    display: none;
 }
