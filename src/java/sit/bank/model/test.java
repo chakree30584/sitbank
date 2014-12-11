@@ -39,5 +39,6 @@ public class test {
         //System.out.println(new User().findByUserId(1).get(0).getMyAccount().getType());
         //System.out.println("Account: "+new Account().findMyAccount("T"));
         //System.out.println("Register E: "+new UserEBank().addUserE("ManE", "121212", 100));
+        //System.out.println("Reset Pass: "+new UserEBank().resetPassword(1, "12345", "12345"));
     }
 }

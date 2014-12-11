@@ -6,9 +6,14 @@
 
 package sit.bank.model;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  *
@@ -17,6 +22,7 @@ import java.sql.SQLException;
 public class UserEBank {
     private String userName;
     private String password;
+
     private int accountId;
 
     public String getUserName() {
@@ -69,6 +75,11 @@ public class UserEBank {
     }
     
     
+
+    
+    
+    
+
     
     
 }
