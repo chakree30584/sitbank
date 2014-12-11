@@ -6,6 +6,9 @@
 
 <%@tag description="put the tag description here" pageEncoding="UTF-8"%>
 
-<footer>
-    <p>&copy; IT18, School of Information Technology, King Mongkut's University of Technology Thonburi - 2014</p>
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">
+   &copy; School of Information Technology, King Mongkut's University of Technology Thonburi - 2014</p>
+      </div>
 </footer>

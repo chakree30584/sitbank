@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
-        <servlet-name>Main</servlet-name>
-        <servlet-class>sit.bank.servlet.Main</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>SearchAjaxServlet</servlet-name>
         <servlet-class>sit.bank.servlet.SearchAjaxServlet</servlet-class>
     </servlet>
@@ -16,10 +12,22 @@
         <servlet-name>AccountCmdServlet</servlet-name>
         <servlet-class>sit.bank.servlet.AccountCmdServlet</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>Main</servlet-name>
-        <url-pattern>/Main</url-pattern>
-    </servlet-mapping>
+    <servlet>
+        <servlet-name>UserList</servlet-name>
+        <servlet-class>sit.bank.servlet.UserList</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Withdraw</servlet-name>
+        <servlet-class>sit.bank.servlet.Withdraw</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Deposit</servlet-name>
+        <servlet-class>sit.bank.servlet.Deposit</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Transfer</servlet-name>
+        <servlet-class>sit.bank.servlet.Transfer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SearchAjaxServlet</servlet-name>
         <url-pattern>/SearchAjaxServlet</url-pattern>
@@ -31,6 +39,22 @@
     <servlet-mapping>
         <servlet-name>AccountCmdServlet</servlet-name>
         <url-pattern>/AccountCmdServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserList</servlet-name>
+        <url-pattern>/UserList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Withdraw</servlet-name>
+        <url-pattern>/Withdraw</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Deposit</servlet-name>
+        <url-pattern>/Deposit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Transfer</servlet-name>
+        <url-pattern>/Transfer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

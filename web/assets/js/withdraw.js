@@ -184,7 +184,7 @@ $("#contbtn").on("click", function (e) {
         });
         $("#accconfirmname").html(accObj.accountName);
         $("#accconfirmtype").html(accObj.type);
-        $("#accconfirmbalance").html(accObj.balance);
+        $("#accconfirmbalance").html(accounting.formatMoney(accObj.balance,''));
         $("#addamt").html("-" + accounting.formatMoney(amount, ''));
         $("#confirmmodal").modal("show");
         keepamount = amount;

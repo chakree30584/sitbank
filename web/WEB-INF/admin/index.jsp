@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>SIT E-Banking</title>
         <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-        <link href="assets/css/bootstrap-sitbank.css" rel="stylesheet">
+        <link href="assets/css/sitbank.css" rel="stylesheet">
         <style>
             body {
                 padding-top: 50px;

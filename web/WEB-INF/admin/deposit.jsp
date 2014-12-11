@@ -7,8 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>SIT E-Banking</title>
-        <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-        <link href="assets/css/bootstrap-sitbank.css" rel="stylesheet">
+        <link href="assets/css/sitbank.css" rel="stylesheet">
         <link href="assets/css/admin.css" rel="stylesheet">
     </head>
 
@@ -17,7 +16,7 @@
         <t:adminnavbar/>
 
         <div class="container">
-            <h2>ถอนเงิน</h2><br>
+            <h1>ฝากเงิน</h1><br>
             <div class="row">
                 <div class="col-md-6">
                     <div class="panel panel-primary panel-acc">
@@ -59,8 +58,6 @@
 
             </div>
 
-            <hr>
-
             <t:footer />
 
         </div> <!-- /container -->
@@ -78,6 +75,9 @@
                             <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
                             <input type="text" class="form-control money-lg" id="accsearchbox">
                         </div>
+                        <p class="help-block">
+                            <span class="glyphicon glyphicon-info-sign"></span> กรอกข้อมูลค้นหาได้จากชื่อและเลขที่บัญชี
+                        </p>
                         <div id="accsearchloader" style="display:none; width:100%; text-align: center; padding-top:30px; padding-bottom:10px;">
                             <img src="assets/img/loader0.gif" style="width:50px;">
                         </div>
@@ -137,7 +137,7 @@
                                 </td><td>
                                     <div id="addamt" style="font-size:4em; padding-left:10px;"></div>
                                 </td></tr></table><br>
-                        ยอดเงินที่ถอน (ตัวหนังสือ) : <span id="accconfirmthaibaht"></span>
+                        ยอดเงินที่ฝาก (ตัวหนังสือ) : <span id="accconfirmthaibaht"></span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal" id="cancelconbtn">แก้ไข</button>
@@ -157,7 +157,7 @@
         <script src="assets/js/bootbox.min.js"></script>
         <script src="assets/js/accounting.js"></script>
         <script src="assets/js/jquery.animateNumber.min.js"></script>
-        <script src="assets/js/withdraw.js"></script>
+        <script src="assets/js/deposit.js"></script>
         
     </body>
 </html>
