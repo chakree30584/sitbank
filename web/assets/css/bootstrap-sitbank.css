@@ -7,6 +7,8 @@ and open the template in the editor.
     Created on : Dec 11, 2014, 12:38:21 PM
     Author     : chakree30584
 */
+@import url("../fonts/thaisansneue/fontface.css");
+@import url("animate.css");
 
 html {
   font-family: sans-serif;
