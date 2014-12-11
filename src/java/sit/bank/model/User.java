@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,15 @@ public class User {
     private String zip;
 
     private Account myAccount;
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+    private List<Transaction> transactions = null;
 
     public long getUserId() {
         return userId;
@@ -179,11 +189,11 @@ public class User {
     }
 
     public boolean addUser(String fullName,
-        String lastName, String sex, String identification,
-        String email, String mobilePhone, String homePhone,
-        String address, String road,
-        String subDistrict, String district, String country,
-        String province, String zip, String accountName, String type, double money) {
+            String lastName, String sex, String identification,
+            String email, String mobilePhone, String homePhone,
+            String address, String road,
+            String subDistrict, String district, String country,
+            String province, String zip, String accountName, String type, double money) {
         int result = 0;
         int result2 = 0;
         int lastresult = 0;
@@ -218,16 +228,24 @@ public class User {
                     ps2.setLong(8, iduser);
                     result2 = ps2.executeUpdate();
                     
-                    if(result2 > 0){
-                     //add account table
-                            String sql3 = "INSERT INTO Account Values (null, ?, ?, ?, ?)";
-                            PreparedStatement ps3 = con.prepareStatement(sql3);
-                            ps3.setString(1, accountName);
-                            ps3.setString(2, type);
-                            ps3.setDouble(3, money);
-                            ps3.setLong(4, iduser);
-                            lastresult = ps3.executeUpdate();
+
+                    if (result2 > 0) {
+                        //add account table
+                        String sql3 = "INSERT INTO Account Values (null, ?, ?, ?, ?)";
+                        PreparedStatement ps3 = con.prepareStatement(sql3);
+                        ps3.setString(1, accountName);
+                        ps3.setString(2, type);
+                        ps3.setDouble(3, money);
+                        ps3.setLong(4, iduser);
+                        lastresult = ps3.executeUpdate();
                         
+                        con.close();
+                        Transaction trans = new Transaction();
+                        trans.setAmount(0);
+                        trans.setTransactionCode(Transaction.TransactionCode.ADU);
+                        trans.setTransactionDateTime(new Date(System.currentTimeMillis()));
+                        addTransaction(0, trans);
+
                     }
                 }
             }
@@ -313,14 +331,34 @@ public class User {
             ps.setLong(15, userId);
             result = ps.executeUpdate();
             
+            if (getTransactions() != null) {
+                for (Transaction trans : getTransactions()) {
+                    if (trans.getTransactionId() == 0) {
+                        trans.writeTransaction(userId);
+                    }
+                }
+                transactions.clear();
+            }
+
         } catch (SQLException ex) {
             System.out.println(ex);
         }
 
-        return result>0;
+        return result > 0;
     }
-    
-    
-    
+
+    private void addTransaction(Transaction t) {
+        if (transactions == null) {
+            transactions = new ArrayList<Transaction>();
+        }
+        transactions.add(t);
+    }
+
+    private void addTransaction(int x, Transaction t) {
+        if (transactions == null) {
+            transactions = new ArrayList<Transaction>();
+        }
+        transactions.add(x, t);
+    }
 
 }
