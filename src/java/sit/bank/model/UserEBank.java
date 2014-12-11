@@ -47,7 +47,7 @@ public class UserEBank {
     }
     
     
-    
+    //kuy
     public boolean resetPassword(int userId, String oldPass, String newPass){
         Connection con = null;
         this.password = null;
