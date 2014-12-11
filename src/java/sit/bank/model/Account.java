@@ -163,6 +163,23 @@ public class Account {
         }
         return arr;
     }
+    
+    public static List<Account> findAccountOfUid(long accid) {
+        ArrayList<Account> arr = new ArrayList<Account>();
+        try {
+            Connection con = ConnectionBuilder.getConnection();
+            String sql = "SELECT * FROM Account WHERE Account_Id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setLong(1, accid);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                arr.add(convertResultSetToAccount(rs));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return arr;
+    }
 
     public boolean update() {
         int status = 0;

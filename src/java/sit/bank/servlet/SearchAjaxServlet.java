@@ -32,7 +32,7 @@ public class SearchAjaxServlet extends HttpServlet {
         System.out.println(type);
         JSONObject json = new JSONObject();
         if (type.equals("name")) {
-            List<User> ac = User.findByUser(searchValue);
+            List<User> ac = User.findByName(searchValue);
             if (ac == null) {
                 json.put("result", 0);
             } else {
@@ -40,7 +40,7 @@ public class SearchAjaxServlet extends HttpServlet {
                 json.put("acc", ac);
             }
         }else if(type.equals("id")){
-            Account ac = Account.findMyAccount(searchValue);
+            Account ac = Account.findByAccountId(Long.parseLong(searchValue));
             if (ac == null) {
                 json.put("result", 0);
             } else {
@@ -50,7 +50,7 @@ public class SearchAjaxServlet extends HttpServlet {
                 json.put("acc", li);
             }
         }else if(type.equals("getacc")){
-            List<User> ac = User.findByUser(searchValue);
+            List<Account> ac = Account.findAccountOfUid(Long.parseLong(searchValue));
             if (ac == null) {
                 json.put("result", 0);
             } else {
