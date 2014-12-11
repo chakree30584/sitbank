@@ -131,7 +131,7 @@ public final class ThaiBaht {
             buffer.append(SCALE_TH[scale_idx]);  
         }  
         return buffer.toString();  
-    }  
+    }
   
     /** 
      * @param args 

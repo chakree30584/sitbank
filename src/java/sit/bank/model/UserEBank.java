@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package sit.bank.model;
 
 
@@ -11,10 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-/**
- *
- * @author Man
- */
 public class UserEBank {
     private String userName;
     private String password;
@@ -49,15 +39,13 @@ public class UserEBank {
         int save = 0;
         try{
             Connection con = ConnectionBuilder.getConnection();
-            if(new Account().findMyAccount(accountId+"")!=null){
+            if(new Account().findByAccountId(accountId)!=null){
                 String sql = "INSERT INTO UserEBank Values(?, ?, ?)";
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setString(1, user);
                 ps.setString(2, pass);
                 ps.setLong(3, accountId);
-                
                 save = ps.executeUpdate();
-                
             }
         }
         catch(SQLException ex){
@@ -96,7 +84,6 @@ public class UserEBank {
                 stm.setString(1, newPass);
                 stm.setLong(2, userId);
                 done = stm.executeUpdate();
-                
             }
         } catch (SQLException ex) {
             System.out.println(ex);

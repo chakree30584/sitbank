@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sit.bank.model;
 
 import java.sql.Connection;
@@ -12,10 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Man
- */
 public class Account {
 
     private long accountId;
@@ -23,12 +15,11 @@ public class Account {
     private String type;
     private Double balance;
     private long userId;
-    private List<Transaction> transactions = null;
-
-    Account() {
-
+    
+    Account(){
+        
     }
-
+    
     Account(long accountId, String accountName, String type, Double balance, long userId) {
         this.accountId = accountId;
         this.accountName = accountName;
@@ -88,13 +79,9 @@ public class Account {
             stm.setDouble(1, balance + money);
             stm.setLong(2, this.accountId);
             done = stm.executeUpdate();
-            Transaction t = new Transaction();
-            t.setAmount(money);
-            t.setTransactionCode(Transaction.TransactionCode.CSD);
-            addTransaction(t);
+            Transaction.writeTransaction(userId, "CSD", money);
         } catch (SQLException ex) {
             System.out.println(ex);
-
         }
         return done > 0;
     }
@@ -113,10 +100,7 @@ public class Account {
                 stm.setDouble(1, b);
                 stm.setLong(2, this.accountId);
                 done = stm.executeUpdate();
-                Transaction t = new Transaction();
-                t.setAmount(money);
-                t.setTransactionCode(Transaction.TransactionCode.CSW);
-                addTransaction(t);
+                Transaction.writeTransaction(userId, "CSW", money);
             }
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -130,65 +114,82 @@ public class Account {
         a.withdraw(accountId1, money);
         a.deposit(accountId2, money);
         Transaction t = new Transaction();
-        t.setAmount(money);
-        t.setTransactionCode(Transaction.TransactionCode.CSD);
-        addTransaction(t);
+        Transaction.writeTransaction(userId, "CST", money);
     }
 
-    public static boolean checkLong(String account) {
-        try {
-            Long.parseLong(account);
-            return true;
-        } catch (Exception ex) {
-            System.out.println("Not number" + ex);
-        }
-        return false;
+    public static boolean openNewAccount(String accountName, String type, Double money, long iduser) throws SQLException {
+        int status = 0;
+        String sql3 = "INSERT INTO Account Values (null, ?, ?, ?, ?)";
+        Connection con = ConnectionBuilder.getConnection();
+        PreparedStatement ps3 = con.prepareStatement(sql3);
+        ps3.setString(1, accountName);
+        ps3.setString(2, type);
+        ps3.setDouble(3, money);
+        ps3.setLong(4, iduser);
+        status = ps3.executeUpdate();
+        con.close();
+        return status > 0;
     }
 
-    public static Account findMyAccount(String account) {
-        Account ac = null;
+    public static Account findByAccountId(long accountId) {
         try {
             Connection con = ConnectionBuilder.getConnection();
-            String sql = "";
-            PreparedStatement ps;
-            if (checkLong(account)) {
-                sql = "SELECT * FROM Account WHERE Account_Id = ?";
-                ps = con.prepareStatement(sql);
-                ps.setLong(1, Long.parseLong(account));
-            } else {
-                sql = "SELECT * FROM Account WHERE Account_Name = ?";
-                ps = con.prepareStatement(sql);
-                ps.setString(1, account);
-            }
+            String sql = "SELECT * FROM Account WHERE Account_Id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setLong(1, accountId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                ac = new Account();
-                ac.setAccountId(rs.getLong("Account_Id"));
-                ac.setAccountName(rs.getString("Account_Name"));
-                ac.setType(rs.getString("Type"));
-                ac.setBalance(rs.getDouble("Balance"));
-                ac.setUserId(rs.getLong("User_Id"));
+                return convertResultSetToAccount(rs);
             }
-
         } catch (SQLException ex) {
-            System.out.println("sql find MyAccount error: " + ex);
+            System.out.println(ex);
         }
+        return null;
+    }
 
+    public static List<Account> findByAccountName(String name) {
+        ArrayList<Account> arr = new ArrayList<Account>();
+        try {
+            Connection con = ConnectionBuilder.getConnection();
+            String sql = "SELECT * FROM Account WHERE Account_Name = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, name + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                arr.add(convertResultSetToAccount(rs));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return arr;
+    }
+
+    public boolean update() {
+        int status = 0;
+        try {
+            Connection con = ConnectionBuilder.getConnection();
+            String sqlUpdate = "UPDATE account SET balance=?, Account_Name=?, Account_Type=? WHERE account_id=?";
+            PreparedStatement stm = con.prepareStatement(sqlUpdate);
+            double balance = this.getBalance();
+            stm.setDouble(1, this.balance);
+            stm.setString(2, this.accountName);
+            stm.setString(3, this.type);
+            stm.setLong(4, this.accountId);
+            status = stm.executeUpdate();
+        } catch (SQLException ex) {
+
+        }
+        return status > 0;
+    }
+
+    public static Account convertResultSetToAccount(ResultSet rs) throws SQLException {
+        Account ac = new Account();
+        ac.setAccountId(rs.getLong("Account_Id"));
+        ac.setAccountName(rs.getString("Account_Name"));
+        ac.setType(rs.getString("Type"));
+        ac.setBalance(rs.getDouble("Balance"));
+        ac.setUserId(rs.getLong("User_Id"));
         return ac;
-    }
-
-    private void addTransaction(Transaction t) {
-        if (transactions == null) {
-            transactions = new ArrayList<Transaction>();
-        }
-        transactions.add(t);
-    }
-
-    private void addTransaction(int x, Transaction t) {
-        if (transactions == null) {
-            transactions = new ArrayList<Transaction>();
-        }
-        transactions.add(x, t);
     }
 
 }

@@ -165,6 +165,8 @@
                     var input = $("#accsearchbox").val();
                     if(isNaN(input)){
                         
+                    }else{
+                        
                     }
                     $("#accsearchloader").fadeOut(500);
                 },1000);

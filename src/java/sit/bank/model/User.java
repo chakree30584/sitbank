@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sit.bank.model;
 
 import java.sql.Connection;
@@ -10,15 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author Man
- */
 public class User {
 
     //UserInfo Table
@@ -40,17 +28,6 @@ public class User {
     private String country;
     private String province;
     private String zip;
-
-    private Account myAccount;
-
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-    private List<Transaction> transactions = null;
 
     public long getUserId() {
         return userId;
@@ -180,24 +157,16 @@ public class User {
         this.zip = zip;
     }
 
-    public Account getMyAccount() {
-        return myAccount;
-    }
-
-    public void setMyAccount(Account myAccount) {
-        this.myAccount = myAccount;
-    }
-
     public boolean addUser(String fullName,
             String lastName, String sex, String identification,
             String email, String mobilePhone, String homePhone,
             String address, String road,
             String subDistrict, String district, String country,
-            String province, String zip, String accountName, String type, double money) {
-        
+            String province, String zip) {
+
         int result = 0;
         int result2 = 0;
-        int lastresult = 0;
+
         try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "INSERT INTO UserInfo Values (null, ?, ?, ?, ?, ?, ?, ?)";
@@ -228,97 +197,51 @@ public class User {
                     ps2.setString(7, zip);
                     ps2.setLong(8, iduser);
                     result2 = ps2.executeUpdate();
-                    
-
-                    if (result2 > 0) {
-                        //add account table
-                        String sql3 = "INSERT INTO Account Values (null, ?, ?, ?, ?)";
-                        PreparedStatement ps3 = con.prepareStatement(sql3);
-                        ps3.setString(1, accountName);
-                        ps3.setString(2, type);
-                        ps3.setDouble(3, money);
-                        ps3.setLong(4, iduser);
-                        lastresult = ps3.executeUpdate();
-                        
-                        con.close();
-                        Transaction trans = new Transaction();
-                        trans.setAmount(0);
-                        trans.setTransactionCode(Transaction.TransactionCode.ADU);
-                        addTransaction(0, trans);
-                    }
+                    Transaction.writeTransaction(userId, "ADU", 0.0);
                 }
             }
-
         } catch (SQLException ex) {
             System.out.println("sql add error: " + ex);
         }
+        return result > 0 && result2 > 0;
+    }
 
-        return result > 0 && result2 > 0 && lastresult > 0;
-    }// เปิดบัญชี
-    
-    public static boolean checkLong(String userId){
-        int check = 0;
-        try{
-            Long.parseLong(userId);
-            check = 1;
-        }
-        catch(Exception ex){
-            System.out.println("isn't Long "+ex);
-        }
-        return check>0;
-    } 
-    
-    public static List<User> findByUser(String userId) {
-        List<User> result = new ArrayList<User>();
+    public static User findByUserId(long userId) {
         try {
             Connection con = ConnectionBuilder.getConnection();
             ResultSet rs = null;
-            if(checkLong(userId)){
-                String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.User_Id = ?";
-                PreparedStatement ps = con.prepareStatement(sql);
-                ps.setLong(1, Long.parseLong(userId));
-                rs = ps.executeQuery();
+            String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id "
+                    + "INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.User_Id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setLong(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return convertResultSetToUserObject(rs);
             }
-            else{
-                String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE UPPER(U.Fullname) like ?";
-                PreparedStatement ps = con.prepareStatement(sql);
-                ps.setString(1, userId.toUpperCase()+"%");
-                rs = ps.executeQuery();
-            }
-                while (rs.next()) {
-                    User u = new User();
-                    u.setFullName(rs.getString("Fullname"));
-                    u.setLastName(rs.getString("Lastname"));
-                    u.setEmail(rs.getString("Email"));
-                    u.setHomePhone(rs.getString("HomePhone"));
-                    u.setIdentification(rs.getString("Identification"));
-                    u.setMobilePhone(rs.getString("MobilePhone"));
-                    u.setSex(rs.getString("Sex"));
-                    u.setUserId(rs.getLong("User_Id"));
-
-                    u.setAddress(rs.getString("Address_Id"));
-                    u.setCountry(rs.getString("Country"));
-                    u.setDistrict(rs.getString("District"));
-                    u.setHomeId(rs.getLong("Home_Id"));
-                    u.setProvince(rs.getString("Province"));
-                    u.setRoad(rs.getString("Road"));
-                    u.setSubDistrict(rs.getString("Subdistrict"));
-                    u.setZip(rs.getString("Zip"));
-
-                    u.setMyAccount(new Account(rs.getLong("Account_Id"),
-                            rs.getString("Account_Name"), rs.getString("Type"),
-                            rs.getDouble("Balance"), rs.getLong("User_Id")));
-
-                    result.add(u);
-                }
         } catch (SQLException ex) {
             System.out.println("sql find By User Id error: " + ex);
         }
-
-        return result;
+        return null;
     }
-    
-    
+
+    public static List<User> findByName(String name) {
+        ArrayList<User> arr = new ArrayList();
+        try {
+            Connection con = ConnectionBuilder.getConnection();
+            ResultSet rs = null;
+            String sql = "SELECT * FROM Account A INNER JOIN UserInfo U ON A.User_Id = U.User_Id "
+                    + "INNER JOIN Address AD ON U.User_Id = AD.User_Id WHERE U.Fullname = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, name + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                arr.add(convertResultSetToUserObject(rs));
+            }
+        } catch (SQLException ex) {
+            System.out.println("sql find By User Id error: " + ex);
+        }
+        return arr;
+    }
 
     public boolean update() {
         int result = 0;
@@ -347,35 +270,31 @@ public class User {
             ps.setString(14, zip);
             ps.setLong(15, userId);
             result = ps.executeUpdate();
-            
-            if (getTransactions() != null) {
-                for (Transaction trans : getTransactions()) {
-                    if (trans.getTransactionId() == 0) {
-                        trans.writeTransaction(userId);
-                    }
-                }
-                transactions.clear();
-            }
-
+            Transaction.writeTransaction(userId, "UPU", 0.0);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-
         return result > 0;
     }
 
-    private void addTransaction(Transaction t) {
-        if (transactions == null) {
-            transactions = new ArrayList<Transaction>();
-        }
-        transactions.add(t);
+    public static User convertResultSetToUserObject(ResultSet rs) throws SQLException {
+        User u = new User();
+        u.setFullName(rs.getString("Fullname"));
+        u.setLastName(rs.getString("Lastname"));
+        u.setEmail(rs.getString("Email"));
+        u.setHomePhone(rs.getString("HomePhone"));
+        u.setIdentification(rs.getString("Identification"));
+        u.setMobilePhone(rs.getString("MobilePhone"));
+        u.setSex(rs.getString("Sex"));
+        u.setUserId(rs.getLong("User_Id"));
+        u.setAddress(rs.getString("Address_Id"));
+        u.setCountry(rs.getString("Country"));
+        u.setDistrict(rs.getString("District"));
+        u.setHomeId(rs.getLong("Home_Id"));
+        u.setProvince(rs.getString("Province"));
+        u.setRoad(rs.getString("Road"));
+        u.setSubDistrict(rs.getString("Subdistrict"));
+        u.setZip(rs.getString("Zip"));
+        return u;
     }
-
-    private void addTransaction(int x, Transaction t) {
-        if (transactions == null) {
-            transactions = new ArrayList<Transaction>();
-        }
-        transactions.add(x, t);
-    }
-
 }

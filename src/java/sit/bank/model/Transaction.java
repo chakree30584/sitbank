@@ -7,7 +7,6 @@ package sit.bank.model;
 
 import java.io.Serializable;
 import java.sql.Connection;
-import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import sit.bank.model.ConnectionBuilder;
 
 /**
  *
@@ -37,7 +35,7 @@ public class Transaction implements Serializable {
 
         ADU, UPU, CSW, CSD, CST;
     };
-    
+
     private long transactionId;
     private TransactionCode transactionCode;
     private String transactionDateTime;
@@ -84,7 +82,7 @@ public class Transaction implements Serializable {
         try {
             Connection con = ConnectionBuilder.getConnection();
             Transaction t = null;
-            String sqlCmd = "SELECT * FROM  transactions WHERE account_id = ?";
+            String sqlCmd = "SELECT * FROM transactions WHERE account_id = ?";
             PreparedStatement stm = con.prepareStatement(sqlCmd);
             stm.setLong(1, accountId);
             ResultSet rs = stm.executeQuery();
@@ -100,14 +98,7 @@ public class Transaction implements Serializable {
         return transactions;
     }
 
-    private static void orm(ResultSet rs, Transaction t) throws SQLException {
-        t.setAmount(rs.getDouble("amount"));
-        t.setTransactionDateTime(rs.getString("transaction_date"));
-        t.setTransactionId(rs.getLong("transaction_id"));
-        t.setTransactionCode(TransactionCode.valueOf(rs.getString("transaction_code")));
-    }
-
-    public boolean writeTransaction(long acid) {
+    public static boolean writeTransaction(long acid, String code, Double amount) {
         int x = 0;
         try {
             Connection conn = ConnectionBuilder.getConnection();
@@ -115,14 +106,21 @@ public class Transaction implements Serializable {
             String sqlCmd = "INSERT INTO transactions (account_id, transaction_code, transaction_date, amount) VALUES (?, ?, now(), ?)";
             PreparedStatement pstm = conn.prepareStatement(sqlCmd);
             pstm.setLong(1, acid);
-            pstm.setString(2, this.transactionCode.name());
+            pstm.setString(2, code);
             pstm.setDouble(3, amount);
             x = pstm.executeUpdate();
             conn.close();
         } catch (SQLException ex) {
             System.err.println(ex);
         }
-        return x>0;
+        return x > 0;
+    }
+
+    private static void orm(ResultSet rs, Transaction t) throws SQLException {
+        t.setAmount(rs.getDouble("amount"));
+        t.setTransactionDateTime(rs.getString("transaction_date"));
+        t.setTransactionId(rs.getLong("transaction_id"));
+        t.setTransactionCode(TransactionCode.valueOf(rs.getString("transaction_code")));
     }
 
 }
