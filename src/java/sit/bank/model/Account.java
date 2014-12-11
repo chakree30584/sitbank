@@ -7,6 +7,7 @@ package sit.bank.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
@@ -126,6 +127,55 @@ public class Account {
         a.withdraw(accountId1, money);
         a.deposit(accountId2, money);
     }
+    public boolean checkInt(String account){
+        try{
+            Integer.parseInt(account);
+            return true;
+        }
+        catch(Exception ex){
+            System.out.println("Not number"+ex);
+        }
+        return false;
+    }
+    
+    public Account findMyAccount(String account){
+        Account ac = null;
+        try{
+            Connection con = ConnectionBuilder.getConnection();
+            String sql = "";
+            PreparedStatement ps;
+            if(checkInt(account)){
+                sql = "SELECT * FROM Account WHERE Account_Id = ?";
+                ps = con.prepareStatement(sql);
+                ps.setInt(1, Integer.parseInt(account));
+            }
+            else{
+                sql = "SELECT * FROM Account WHERE Account_Name = ?";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, account);
+            }
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                ac = new Account();
+                ac.setAccountId(rs.getInt("Account_Id"));
+                ac.setAccountName(rs.getString("Account_Name"));
+                ac.setType(rs.getString("Type"));
+                ac.setBalance(rs.getDouble("Balance"));
+                ac.setUserId(rs.getInt("User_Id"));
+            }
+             
+            
+        }
+        catch(SQLException ex){
+            System.out.println("sql find MyAccount error: "+ex);
+        }
+        
+        return ac;
+    }
+    
+    
+    
+    
     
     
     

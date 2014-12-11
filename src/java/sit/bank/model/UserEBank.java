@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class UserEBank {
     private String userName;
     private String password;
-    private int userId;
+    private int accountId;
 
     public String getUserName() {
         return userName;
@@ -38,12 +38,37 @@ public class UserEBank {
         this.password = password;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    
+
+    
+    
+    public boolean addUserE(String user, String pass, int accountId){
+        int save = 0;
+        try{
+            Connection con = ConnectionBuilder.getConnection();
+            if(new Account().findMyAccount(accountId+"")!=null){
+                String sql = "INSERT INTO UserEBank Values(?, ?, ?)";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1, user);
+                ps.setString(2, pass);
+                ps.setInt(3, accountId);
+                
+                save = ps.executeUpdate();
+                
+            }
+        }
+        catch(SQLException ex){
+            System.out.println("sql add user e-bank error: "+ex);
+        }
+        return save > 0;
     }
     
     public boolean setUserEBank(String username, String password, int userId){
@@ -65,7 +90,6 @@ public class UserEBank {
         return false;
     }
     
-    //kuy
     public boolean resetPassword(int userId, String oldPass, String newPass){
         Connection con = null;
         this.password = null;
@@ -85,6 +109,5 @@ public class UserEBank {
         }
         return done >0;
     }
-    
     
 }
