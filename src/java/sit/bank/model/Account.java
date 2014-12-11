@@ -9,8 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.kohsuke.rngom.ast.builder.BuildException;
@@ -26,12 +28,13 @@ public class Account {
     private String type;
     private Double balance;
     private int userId;
-    
-    Account(){
-    
+    private List<Transaction> transactions = null;
+
+    Account() {
+
     }
-    
-    Account(int accountId, String accountName, String type, Double balance, int userId){
+
+    Account(int accountId, String accountName, String type, Double balance, int userId) {
         this.accountId = accountId;
         this.accountName = accountName;
         this.type = type;
@@ -90,12 +93,16 @@ public class Account {
             stm.setDouble(1, balance + money);
             stm.setInt(2, this.accountId);
             done = stm.executeUpdate();
-            
+            Transaction t = new Transaction();
+            t.setAmount(money);
+            t.setTransactionCode(Transaction.TransactionCode.CSD);
+            t.setTransactionDateTime(new Date(System.currentTimeMillis()));
+            addTransaction(t);
         } catch (SQLException ex) {
             System.out.println(ex);
 
         }
-        return done>0;
+        return done > 0;
     }
 
     public boolean withdraw(int accountId, double money) {
@@ -112,49 +119,57 @@ public class Account {
                 stm.setDouble(1, b);
                 stm.setInt(2, this.accountId);
                 done = stm.executeUpdate();
-               
+                Transaction t = new Transaction();
+                t.setAmount(money);
+                t.setTransactionCode(Transaction.TransactionCode.CSW);
+                t.setTransactionDateTime(new Date(System.currentTimeMillis()));
+                addTransaction(t);
             }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        return done>0;
+        return done > 0;
     }
 
-    public static void transfer(double money, int accountId1, int accountId2) {
+    public void transfer(double money, int accountId1, int accountId2) {
         Connection con = null;
         Account a = null;
         a.withdraw(accountId1, money);
         a.deposit(accountId2, money);
+        Transaction t = new Transaction();
+        t.setAmount(money);
+        t.setTransactionCode(Transaction.TransactionCode.CSD);
+        t.setTransactionDateTime(new Date(System.currentTimeMillis()));
+        addTransaction(t);
     }
-    public boolean checkInt(String account){
-        try{
+
+    public boolean checkInt(String account) {
+        try {
             Integer.parseInt(account);
             return true;
-        }
-        catch(Exception ex){
-            System.out.println("Not number"+ex);
+        } catch (Exception ex) {
+            System.out.println("Not number" + ex);
         }
         return false;
     }
-    
-    public Account findMyAccount(String account){
+
+    public Account findMyAccount(String account) {
         Account ac = null;
-        try{
+        try {
             Connection con = ConnectionBuilder.getConnection();
             String sql = "";
             PreparedStatement ps;
-            if(checkInt(account)){
+            if (checkInt(account)) {
                 sql = "SELECT * FROM Account WHERE Account_Id = ?";
                 ps = con.prepareStatement(sql);
                 ps.setInt(1, Integer.parseInt(account));
-            }
-            else{
+            } else {
                 sql = "SELECT * FROM Account WHERE Account_Name = ?";
                 ps = con.prepareStatement(sql);
                 ps.setString(1, account);
             }
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 ac = new Account();
                 ac.setAccountId(rs.getInt("Account_Id"));
                 ac.setAccountName(rs.getString("Account_Name"));
@@ -162,20 +177,26 @@ public class Account {
                 ac.setBalance(rs.getDouble("Balance"));
                 ac.setUserId(rs.getInt("User_Id"));
             }
-             
-            
+
+        } catch (SQLException ex) {
+            System.out.println("sql find MyAccount error: " + ex);
         }
-        catch(SQLException ex){
-            System.out.println("sql find MyAccount error: "+ex);
-        }
-        
+
         return ac;
     }
-    
- 
-    
-    
-    
-    
-    
+
+    private void addTransaction(Transaction t) {
+        if (transactions == null) {
+            transactions = new ArrayList<Transaction>();
+        }
+        transactions.add(t);
+    }
+
+    private void addTransaction(int x, Transaction t) {
+        if (transactions == null) {
+            transactions = new ArrayList<Transaction>();
+        }
+        transactions.add(x, t);
+    }
+
 }
