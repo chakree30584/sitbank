@@ -157,12 +157,12 @@ public class User {
         this.zip = zip;
     }
 
-    public boolean addUser(String fullName,
+    public static boolean addUser(String fullName,
             String lastName, String sex, String identification,
             String email, String mobilePhone, String homePhone,
             String address, String road,
             String subDistrict, String district, String country,
-            String province, String zip) {
+            String province, String zip, String accountName) {
 
         int result = 0;
         int result2 = 0;
@@ -197,7 +197,8 @@ public class User {
                     ps2.setString(7, zip);
                     ps2.setLong(8, iduser);
                     result2 = ps2.executeUpdate();
-                    Transaction.writeTransaction(userId, "ADU", 0.0);
+                    Transaction.writeTransaction(iduser, "ADU", 0.0);
+                    Account.openNewAccount(accountName, "ออมทรัพย์", 0.0, iduser);
                 }
             }
         } catch (SQLException ex) {
