@@ -28,13 +28,14 @@ public class Transaction implements Serializable {
     static {
         transactionDescription.put("ADU", "Add User");
         transactionDescription.put("UPU", "Update User");
-        //transactionDescription.put("CSW", "Cash Withdraw");
-        //transactionDescription.put("UAC", "Update Account");
+        transactionDescription.put("CSW", "Cash Withdraw");
+        transactionDescription.put("CSD", "Cash Deposite");
+        transactionDescription.put("CST", "Cash Transfer");
     }
 
     public enum TransactionCode {
 
-        ADU, UPU, CSW, UAC
+        ADU, UPU, CSW, CSD, CST;
     };
     
     private long transactionId;
