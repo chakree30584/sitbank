@@ -51,7 +51,7 @@
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </a>
                             &nbsp;&nbsp;
-                            <a href="UserEdit?uid=<%=u.getUserId()%>">
+                            <a href="ManageUser?userId=<%=u.getUserId()%>&act=edit">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                         </td>
