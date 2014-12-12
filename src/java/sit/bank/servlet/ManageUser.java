@@ -71,7 +71,8 @@ public class ManageUser extends HttpServlet {
             }
         }
         else{
-            response.sendRedirect("/registerpage.jsp");
+            //response.sendRedirect("/registerpage.jsp");
+            getServletContext().getRequestDispatcher("/registerpage.jsp").forward(request, response);
         }
         
     }
