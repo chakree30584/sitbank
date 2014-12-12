@@ -1,8 +1,9 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@tag description="put the tag description here" pageEncoding="UTF-8"%>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#"  style="width:180px; margin-top: -15px;">
+            <a class="navbar-brand" href="./"  style="width:180px; margin-top: -15px;">
                 <table>
                     <tr>
                         <td>
@@ -35,5 +36,17 @@
                 <a href="TransactionView">รายการทางการเงิน</a>
             </li>
         </ul>
+        <c:choose>
+            <c:when test="${empty sessionScope.u}">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Please Login</a></li>
+                </ul>
+            </c:when>
+            <c:otherwise>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="LogoutServlet"><span class="glyphicon glyphicon-user"></span> ${sessionScope.u}</a></li>
+                </ul>
+            </c:otherwise>
+        </c:choose>
     </div>
 </nav>

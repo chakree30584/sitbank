@@ -1,7 +1,7 @@
 <%@page import="sit.bank.model.Account"%>
 <%@page import="java.util.List"%>
 <%@page import="sit.bank.model.User"%>
-<%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/" %>
 <!DOCTYPE html>
 <html lang="en">
