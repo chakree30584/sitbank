@@ -24,8 +24,8 @@ public class Transaction implements Serializable {
     public static final Map<String, String> transactionDescription = new HashMap<String, String>();
 
     static {
-        transactionDescription.put("ADU", "Add User");
-        transactionDescription.put("UPU", "Update User");
+        transactionDescription.put("ADU", "Add Account");
+        transactionDescription.put("UPU", "Update Account");
         transactionDescription.put("CSW", "Cash Withdraw");
         transactionDescription.put("CSD", "Cash Deposite");
         transactionDescription.put("CST", "Cash Transfer");
@@ -39,6 +39,7 @@ public class Transaction implements Serializable {
     private long transactionId;
     private TransactionCode transactionCode;
     private String transactionDateTime;
+    private Long accId;
     private double amount;
 
     public long getTransactionId() {
@@ -77,14 +78,43 @@ public class Transaction implements Serializable {
         return transactionDescription.get(transactionCode.name());
     }
 
+    public Long getAccId() {
+        return accId;
+    }
+
+    public void setAccId(Long accId) {
+        this.accId = accId;
+    }
+
     public static List<Transaction> getTransaction(long accountId) {
         List<Transaction> transactions = new ArrayList<Transaction>();
         try {
             Connection con = ConnectionBuilder.getConnection();
             Transaction t = null;
-            String sqlCmd = "SELECT * FROM Transactions WHERE account_id = ?";
+            String sqlCmd = "SELECT * FROM Transactions WHERE account_id = ? OR account_id = ? ORDER BY transaction_id DESC";
             PreparedStatement stm = con.prepareStatement(sqlCmd);
             stm.setLong(1, accountId);
+            stm.setString(2, accountId+""+1111111+"%");
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                t = new Transaction();
+                orm(rs, t);
+                transactions.add(t);
+            }
+            con.close();
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+        return transactions;
+    }
+    
+    public static List<Transaction> getAllTransaction() {
+        List<Transaction> transactions = new ArrayList<Transaction>();
+        try {
+            Connection con = ConnectionBuilder.getConnection();
+            Transaction t = null;
+            String sqlCmd = "SELECT * FROM Transactions ORDER BY transaction_id DESC";
+            PreparedStatement stm = con.prepareStatement(sqlCmd);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 t = new Transaction();
@@ -122,6 +152,7 @@ public class Transaction implements Serializable {
         t.setTransactionDateTime(rs.getString("transaction_date"));
         t.setTransactionId(rs.getLong("transaction_id"));
         t.setTransactionCode(TransactionCode.valueOf(rs.getString("transaction_code")));
+        t.setAccId(rs.getLong("account_id"));
     }
 
 }

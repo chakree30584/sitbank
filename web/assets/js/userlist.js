@@ -60,13 +60,13 @@ function viewuser(uid) {
         success: function (data) {
             if (data.result == 1) {
                 $.each(data.acc, function (i, acc) {
-                    var result = '<br><div class="panel panel-primary animated fadeIn accbkselector" data-id="' + acc.accountId + '">';
+                    var result = '<br><a href="TransactionView?accId=' + acc.accountId + '"><div class="panel panel-primary animated fadeIn accbkselector" data-id="' + acc.accountId + '">';
                     result += '<div class="panel-body searchaccbody"><table><tr><td width="100"><h1><span style="font-size:2em;">';
                     result += '<span class="glyphicon glyphicon-usd"></span></span></h1></td><td>';
                     result += '<span style="font-size:2em;">' + acc.accountName + '</span><br>';
                     result += 'บัญชี' + acc.type + '<br>';
                     result += 'ยอดเงิน : ' + accounting.formatMoney(acc.balance, '');
-                    result += '</td></tr></table></div></div>';
+                    result += '</td></tr></table></div></div></a>';
                     $("#viewaccount").append(result);
                 });
                 $("#viewaccount").slideDown(300);

@@ -81,7 +81,7 @@ public class Account {
             stm.setDouble(1, balance + money);
             stm.setLong(2, accountId);
             done = stm.executeUpdate();
-            Transaction.writeTransaction(userId, "CSD", money);
+            Transaction.writeTransaction(accountId, "CSD", money);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -102,7 +102,7 @@ public class Account {
                 stm.setDouble(1, b);
                 stm.setLong(2, accountId);
                 done = stm.executeUpdate();
-                Transaction.writeTransaction(userId, "CSW", money);
+                Transaction.writeTransaction(accountId, "CSW", money);
             }
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -198,6 +198,7 @@ public class Account {
             stm.setString(3, this.type);
             stm.setLong(4, this.accountId);
             status = stm.executeUpdate();
+            Transaction.writeTransaction(accountId, "UPU", 0.0);
         } catch (SQLException ex) {
 
         }

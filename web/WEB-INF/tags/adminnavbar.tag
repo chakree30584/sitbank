@@ -31,6 +31,9 @@
             <li id="navadduser">
                 <a href="ManageUser">เพิ่มสมาชิก</a>
             </li>
+            <li id="navtranscation">
+                <a href="TransactionView">รายการทางการเงิน</a>
+            </li>
         </ul>
     </div>
 </nav>

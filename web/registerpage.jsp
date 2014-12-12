@@ -170,7 +170,7 @@
                             <div class="form-group">
                                 <tr>
                                     <th style="text-align: right"><label for="exampleInputCountry">Country:&nbsp;</label></th>
-                                    
+
                                     <td align="left">
                                         <select class="form-control" name="country" required="true" >
                                             <option value=""></option>
@@ -249,6 +249,20 @@
         </div>
 
 
-                                    <sit:footer/>
+        <sit:footer/>
+
     </body>
+    <script src="assets/js/jquery-2.1.1.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootbox.min.js"></script>
+    <script src="assets/js/accounting.js"></script>
+    <script src="assets/js/jquery.animateNumber.min.js"></script>
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap.js"></script>
+    <script>
+        $(document).ready(function (e) {
+            $("#navadduser").addClass("active");
+        });
+
+    </script>
 </html>

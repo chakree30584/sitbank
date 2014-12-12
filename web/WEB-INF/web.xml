@@ -32,6 +32,10 @@
         <servlet-name>ManageUser</servlet-name>
         <servlet-class>sit.bank.servlet.ManageUser</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TransactionView</servlet-name>
+        <servlet-class>sit.bank.servlet.TransactionView</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SearchAjaxServlet</servlet-name>
         <url-pattern>/SearchAjaxServlet</url-pattern>
@@ -63,6 +67,10 @@
     <servlet-mapping>
         <servlet-name>ManageUser</servlet-name>
         <url-pattern>/ManageUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TransactionView</servlet-name>
+        <url-pattern>/TransactionView</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
