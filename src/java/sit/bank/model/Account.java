@@ -20,6 +20,7 @@ public class Account {
         
     }
     
+    /*
     Account(long accountId, String accountName, String type, Double balance, long userId) {
         this.accountId = accountId;
         this.accountName = accountName;
@@ -27,6 +28,7 @@ public class Account {
         this.userId = userId;
         this.balance = balance;
     }
+    */
 
     public long getAccountId() {
         return accountId;
