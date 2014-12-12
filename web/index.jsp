@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="sit.bank.model.Account"%>
 <%@page import="java.util.List"%>
 <%@page import="sit.bank.model.User"%>
@@ -18,30 +19,38 @@
         <t:adminnavbar/>
 
         <div class="container" style="text-align: center; padding-top:100px;">
-            <table style="width:100%;"><tr><td>
-                        <img src="assets/img/LOGO.png" >
-                    </td><td>
-                        <form class="form-horizontal" action="LoginServlet" role="form" method="post">
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-2 control-label">ชื่อผู้ใช้</label>
-                                <div class="col-sm-10">
-                                    <input type="text" name="username" class="form-control" id="inputEmail3" placeholder="">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputPassword3" class="col-sm-2 control-label">รหัสผ่าน</label>
-                                <div class="col-sm-10">
-                                    <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-success">เข้าสู่ระบบ</button>
-                                </div>
-                            </div>
-                        </form>
-                    </td></tr>
-            </table>
+            <c:choose>
+                <c:when test="${empty sessionScope.u}">
+
+                    <table style="width:100%;"><tr><td>
+                                <img src="assets/img/LOGO.png" class="animated bounceIn">
+                            </td><td style="width:60%;">
+                                <form class="form-horizontal animated fadeInRight" action="LoginServlet" role="form" method="post">
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-2 control-label">ชื่อผู้ใช้</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="username" class="form-control" value="admin" id="inputEmail3" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputPassword3" class="col-sm-2 control-label">รหัสผ่าน</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" name="password" class="form-control" value="1234" id="inputPassword3" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <button type="submit" class="btn btn-success">เข้าสู่ระบบ</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td></tr>
+                    </table>
+                </c:when>
+                <c:otherwise>
+                    <img src="assets/img/LOGO.png" >
+                </c:otherwise>
+            </c:choose>
         </div> <!-- /container -->
         <t:footer />
         <script src="assets/js/jquery-2.1.1.min.js"></script>

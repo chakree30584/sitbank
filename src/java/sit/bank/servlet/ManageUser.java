@@ -33,7 +33,8 @@ public class ManageUser extends HttpServlet {
             throws ServletException, IOException {
         String act = request.getParameter("act");
         if(act!=null){    
-            String fullName = new String(request.getParameter("fullname").getBytes("ISO-8859-1"), "UTF-8");
+            if(act.equals("Register")){
+                String fullName = new String(request.getParameter("fullname").getBytes("ISO-8859-1"), "UTF-8");
             String lastName = new String(request.getParameter("lastname").getBytes("ISO-8859-1"), "UTF-8");
             String sex = request.getParameter("sex");
             String identification = request.getParameter("identification");
@@ -51,28 +52,33 @@ public class ManageUser extends HttpServlet {
             String accountName = new String(request.getParameter("accountName").getBytes("ISO-8859-1"), "UTF-8");
             String typeAccount = new String(request.getParameter("typeAccount").getBytes("ISO-8859-1"), "UTF-8");
             double money = Double.parseDouble(request.getParameter("money"));
-
-            if(act.equals("Register")){
                 boolean result = new User().addUser(fullName, lastName, sex, 
                         identification, email, mobilePhone, homePhone, address,
                         road, subDistrict, district, country, province, zip, 
                         accountName, typeAccount, money);
                 if(result){
                     request.setAttribute("acknowledge", "Open Account Finished");
-                    getServletContext().getRequestDispatcher("/userlist.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/WEB-INF/admin/registerpage.jsp").forward(request, response);
                 }
                 else{
                     request.setAttribute("acknowledge", "Cann't Open Account");
-                    getServletContext().getRequestDispatcher("/registerpage.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/WEB-INF/admin/registerpage.jsp").forward(request, response);
                 }
-            }
-            else if(act.equals("Edit")){
-
+            }else if(act.equals("edit")){
+                long userId = Long.parseLong(request.getParameter("userId"));
+                User result = new User().findByUserId(userId);
+                if(result!=null){
+                    request.setAttribute("userObj", result);
+                    getServletContext().getRequestDispatcher("/WEB-INF/admin/editpage.jsp").forward(request, response);
+                }else{
+                    
+                }
+                //getServletContext().getRequestDispatcher("/editpage.jsp").forward(request, response);
             }
         }
         else{
             //response.sendRedirect("/registerpage.jsp");
-            getServletContext().getRequestDispatcher("/registerpage.jsp").forward(request, response);
+            getServletContext().getRequestDispatcher("/WEB-INF/admin/registerpage.jsp").forward(request, response);
         }
         
     }

@@ -15,10 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author khaitong
- */
 public class Transaction implements Serializable {
 
     public static final Map<String, String> transactionDescription = new HashMap<String, String>();
