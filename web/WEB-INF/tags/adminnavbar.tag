@@ -29,7 +29,7 @@
                 <a href="UserList">รายชื่อสมาชิก</a>
             </li>
             <li id="navadduser">
-                <a href="AddUser">เพิ่มสมาชิก</a>
+                <a href="UserForm?view=newUser">เพิ่มสมาชิก</a>
             </li>
         </ul>
     </div>

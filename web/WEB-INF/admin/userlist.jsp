@@ -44,13 +44,10 @@
                         <td><%=u.getSex()%></td>
                         <td><%=u.getProvince()%></td>
                         <td width="90" align="center">
-                            <%=arrAcc.size()%> 
-                            <a href="UserViewAccount?uid=<%=u.getUserId()%>">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                            </a>
+                            <%=arrAcc.size()%>
                         </td>
                         <td width="58">
-                            <a href="UserView?uid=<%=u.getUserId()%>">
+                            <a href="#" onclick="viewuser('<%=u.getUserId()%>')">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </a>
                             &nbsp;&nbsp;
@@ -64,6 +61,67 @@
                     %>
                 </tbody>
             </table>
+            <div class="modal fade" id="viewmodal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h3 class="modal-title">ข้อมูลของ <span class="showname"></span></h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="viewloader" style="width:100%; text-align: center;">
+                                <img src="assets/img/loader0.gif" style="height:40px;">
+                            </div>
+                            <div id="viewbody" style="display:none;">
+                                <table>
+                                    <tr>
+                                        <td align="right">เลขที่สมาชิก : &nbsp;</td>
+                                        <td><span id="showuid"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">ชื่อ - นามสกุล : &nbsp;</td>
+                                        <td><span class="showname"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">เพศ : &nbsp;</td>
+                                        <td><span id="showgender"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">เบอร์โทรศัพท์บ้าน : &nbsp;</td>
+                                        <td><span id="showtelhome"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">เบอร์โทรศัพท์มือถือ : &nbsp;</td>
+                                        <td><span id="showtelmob"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">อีเมล์ : &nbsp;</td>
+                                        <td><span id="showemail"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">รหัสบัตรประชาชน : &nbsp;</td>
+                                        <td><span id="shownationid"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">ที่อยู่ : &nbsp;</td>
+                                        <td><span id="showaddr"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">จังหวัด : &nbsp;</td>
+                                        <td><span id="showprovince"></span></td>
+                                    </tr>
+                                </table>
+                            </div><br>
+                            <h4>บัญชีธนาคาร</h4>
+                            <div id="viewaccount">
+                                
+                            </div>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+
             <t:footer />
 
         </div> <!-- /container -->
@@ -75,29 +133,6 @@
         <script src="assets/js/jquery.animateNumber.min.js"></script>
         <script src="assets/js/jquery.dataTables.min.js"></script>
         <script src="assets/js/dataTables.bootstrap.js"></script>
-        <script>
-            $(document).ready(function () {
-                $("#navuserlist").addClass("active");
-                $('#acclist').DataTable({
-                    "language": {
-                        "sProcessing": "กำลังดำเนินการ...",
-                        "sLengthMenu": "แสดง_MENU_ แถว",
-                        "sZeroRecords": "ไม่พบข้อมูล",
-                        "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-                        "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 แถว",
-                        "sInfoFiltered": "(กรองข้อมูล _MAX_ ทุกแถว)",
-                        "sInfoPostFix": "",
-                        "sSearch": "ค้นหา:",
-                        "sUrl": "",
-                        "oPaginate": {
-                            "sFirst": "เิริ่มต้น",
-                            "sPrevious": "ก่อนหน้า",
-                            "sNext": "ถัดไป",
-                            "sLast": "สุดท้าย"
-                        }
-                    }
-                });
-            });
-        </script>
+        <script src="assets/js/userlist.js"></script>
     </body>
 </html>
