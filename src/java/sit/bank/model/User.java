@@ -162,7 +162,7 @@ public class User {
             String email, String mobilePhone, String homePhone,
             String address, String road,
             String subDistrict, String district, String country,
-            String province, String zip, String accountName) {
+            String province, String zip, String accountName, String accountType, double money) {
 
         int result = 0;
         int result2 = 0;
@@ -198,7 +198,7 @@ public class User {
                     ps2.setLong(8, iduser);
                     result2 = ps2.executeUpdate();
                     Transaction.writeTransaction(iduser, "ADU", 0.0);
-                    Account.openNewAccount(accountName, "ออมทรัพย์", 0.0, iduser);
+                    Account.openNewAccount(accountName, accountType, money, iduser);
                 }
             }
         } catch (SQLException ex) {

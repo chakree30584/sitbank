@@ -29,8 +29,8 @@
         <servlet-class>sit.bank.servlet.Transfer</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UserForm</servlet-name>
-        <servlet-class>sit.bank.servlet.UserForm</servlet-class>
+        <servlet-name>ManageUser</servlet-name>
+        <servlet-class>sit.bank.servlet.ManageUser</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SearchAjaxServlet</servlet-name>
@@ -61,6 +61,8 @@
         <url-pattern>/Transfer</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ManageUser</servlet-name>
+        <url-pattern>/ManageUser</url-pattern>
         <servlet-name>UserForm</servlet-name>
         <url-pattern>/UserForm</url-pattern>
     </servlet-mapping>
